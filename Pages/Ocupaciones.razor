@@ -1,0 +1,115 @@
+﻿@page "/Ocupacion"
+@page "/Ocupacion/{OcupacionId:int}"
+
+@inject OcupacionesBLL XD
+
+
+<head>
+    <style>
+        .card-Footer{
+    padding: 30px;
+    justify-content: center;
+    display: flex;
+    }
+    .card-Footer button{
+        margin: 10px;
+    }
+    .ID button,input{
+       display: inline-block;
+       
+    }
+    .ID{margin: 15px; }
+
+    .Description{margin: 15px;}
+
+    .Carta{
+        padding: 30px;
+        border-radius: 25px;
+        width: 500px;
+    }
+    .card-Body{
+        background-color: white;
+        padding: 15px;
+        border-radius: 25px;
+    }
+    .card-Header{
+        padding: 15px;
+    }
+    h3 {
+        color: white;
+        font-size: 300%;
+    }
+    #_Descripcion{
+        height: 100px;
+        width: 380px;
+    }
+    body{
+         background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    }
+
+    </style>
+</head>
+
+
+<div class="Carta">
+
+    <div class="card-Header">
+        <h3>Ocupaciones</h3>
+    </div>
+    <div class="card-Body">
+        <div class="ID">
+            <label for="_OcupacionID" >Ocupacion ID:</label>
+            <br>
+            <input type="OcupacionID"  id="_OcupacionID" placeholder="Ingrese ID" >
+            <button type="button" class="btn btn-primary"><img src="https://www.flaticon.es/svg/vstatic/svg/3917/3917754.svg?token=exp=1674493782~hmac=277368b217887d4d17c09d3604039a0d" height="20px"> </button>
+        </div>
+        <div class="Description">
+            <label for="_Descripcion" >Descripcion</label><br>
+            <textarea  id="_Descripcion" placeholder="Ingrese Descripcion" ></textarea>
+        </div>
+    </div>
+    <div class="card-Footer">
+        <button class="btn btn-success" @onclick="Nuevo"><img src="https://www.flaticon.es/svg/vstatic/svg/3914/3914672.svg?token=exp=1674492804~hmac=229b0934393b8239ee8148306fc9b0c9" height="20px">Nuevo</button>
+        <button class="btn btn-primary" @onclick="Guardar"><img src="https://www.flaticon.es/svg/vstatic/svg/3917/3917448.svg?token=exp=1674492696~hmac=4ecee358371b0116753bae2e21932bdb" height="20px"> Guardar</button>
+        <button class="btn btn-danger"><img src="https://www.flaticon.es/svg/vstatic/svg/3917/3917411.svg?token=exp=1674492860~hmac=c745ac2fbe76df0c04c483bc6a784c03" height="20px"> Eliminar</button>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public int OcupacionId{get; set;}
+    public Ocupaciones? ocupacion {get;set;}
+    public Ocupaciones? ocupacionEncontrada {get;set;}
+    protected override void OnInitialized()
+        {
+            if(OcupacionId >0){
+                this.ocupacion.OcupacionId = OcupacionId;
+                this.Buscar();
+            }
+        }
+
+    public void Buscar()
+    {
+        
+        if(ocupacionEncontrada != null)
+        {
+            this.ocupacion = ocupacionEncontrada;
+        }
+
+    } 
+
+    public void Nuevo()
+    {
+        this.ocupacion= new Ocupaciones();
+    }
+
+    public void Guardar()
+    {
+        @* if(XD.Guardar(this.ocupacion))
+        {
+            this.Nuevo();
+        } *@
+    }
+}
+
