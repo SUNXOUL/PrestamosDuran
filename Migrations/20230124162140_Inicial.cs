@@ -47,6 +47,20 @@ namespace GestionPrestamosPersonales2023.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Ocupaciones",
+                columns: table => new
+                {
+                    OcupacionId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Descripcion = table.Column<string>(type: "TEXT", nullable: true),
+                    Salario = table.Column<double>(type: "REAL", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ocupaciones", x => x.OcupacionId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tareas",
                 columns: table => new
                 {
@@ -63,7 +77,8 @@ namespace GestionPrestamosPersonales2023.Migrations
                 columns: table => new
                 {
                     TiposTelofonosId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Marca = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -82,6 +97,9 @@ namespace GestionPrestamosPersonales2023.Migrations
 
             migrationBuilder.DropTable(
                 name: "Nacionalidades");
+
+            migrationBuilder.DropTable(
+                name: "Ocupaciones");
 
             migrationBuilder.DropTable(
                 name: "Tareas");

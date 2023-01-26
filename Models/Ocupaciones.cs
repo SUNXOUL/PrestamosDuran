@@ -6,9 +6,8 @@ namespace GestionPrestamosPersonales2023
     {
         [Key]
         public  int OcupacionId{get;set;}
-
-        [Required(ErrorMessage ="La Descripcion es Requerida")]
         public string? Descripcion{get;set;}
+        public double Salario{get;set;}
 
     }
 }

@@ -8,11 +8,7 @@ namespace GestionPrestamosPersonales2023
         public DbSet<Tareas> Tareas {get;set;}
         public DbSet<Adicionales> Adicionales {get;set;}
         public DbSet<TiposTelefonos> TiposTelefonos {get;set;}
-
-        public DbSet<Ocupaciones> Ocupaciones{get;set;}
-        public Contexto(DbContextOptions<Contexto> Options) : base(Options)
-        {
-            
-        }
+        public DbSet<Ocupaciones> Ocupaciones {get;set;}
+        public Contexto(DbContextOptions<Contexto> Options) : base(Options){}
     }
 }

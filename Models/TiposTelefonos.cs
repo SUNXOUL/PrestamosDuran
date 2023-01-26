@@ -5,5 +5,6 @@ namespace GestionPrestamosPersonales2023
     {
                 [Key]
         public  int TiposTelofonosId{get;set;}
+        public string? Marca{get;set;}
     }
 }

@@ -49,6 +49,23 @@ namespace GestionPrestamosPersonales2023.Migrations
                     b.ToTable("Nacionalidades");
                 });
 
+            modelBuilder.Entity("GestionPrestamosPersonales2023.Ocupaciones", b =>
+                {
+                    b.Property<int>("OcupacionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Salario")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("OcupacionId");
+
+                    b.ToTable("Ocupaciones");
+                });
+
             modelBuilder.Entity("GestionPrestamosPersonales2023.Tareas", b =>
                 {
                     b.Property<int>("TareasId")
@@ -65,6 +82,9 @@ namespace GestionPrestamosPersonales2023.Migrations
                     b.Property<int>("TiposTelofonosId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Marca")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("TiposTelofonosId");
 

@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Immutable;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
-using GestionPrestamosPersonales2023.Data;
 using GestionPrestamosPersonales2023;
 
 //Inyeccion de Context
@@ -16,7 +16,6 @@ builder.Services.AddScoped<OcupacionesBLL>();
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
 
@@ -38,3 +37,6 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
+
+
+
