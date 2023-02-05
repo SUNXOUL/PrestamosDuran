@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -61,6 +62,44 @@ namespace GestionPrestamosPersonales2023.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Personas",
+                columns: table => new
+                {
+                    PersonaId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nombre = table.Column<string>(type: "TEXT", nullable: true),
+                    Telefono = table.Column<string>(type: "TEXT", nullable: true),
+                    Celular = table.Column<string>(type: "TEXT", nullable: true),
+                    Balance = table.Column<int>(type: "INTEGER", nullable: true),
+                    LBalance = table.Column<int>(name: "L_Balance", type: "INTEGER", nullable: true),
+                    Email = table.Column<string>(type: "TEXT", nullable: true),
+                    Direccion = table.Column<string>(type: "TEXT", nullable: true),
+                    FNacimiento = table.Column<DateOnly>(name: "F_Nacimiento", type: "TEXT", nullable: true),
+                    OcupacionId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Personas", x => x.PersonaId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Prestamos",
+                columns: table => new
+                {
+                    PrestamoId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FInicio = table.Column<DateOnly>(name: "F_Inicio", type: "TEXT", nullable: false),
+                    FVencimiento = table.Column<DateOnly>(name: "F_Vencimiento", type: "TEXT", nullable: false),
+                    PersonaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Concepto = table.Column<string>(type: "TEXT", nullable: true),
+                    Monto = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Prestamos", x => x.PrestamoId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tareas",
                 columns: table => new
                 {
@@ -100,6 +139,12 @@ namespace GestionPrestamosPersonales2023.Migrations
 
             migrationBuilder.DropTable(
                 name: "Ocupaciones");
+
+            migrationBuilder.DropTable(
+                name: "Personas");
+
+            migrationBuilder.DropTable(
+                name: "Prestamos");
 
             migrationBuilder.DropTable(
                 name: "Tareas");

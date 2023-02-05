@@ -1,6 +1,8 @@
-﻿@page "/R_Ocupacion"
+﻿@page "/Ocupacion"
+@page "/Ocupacion/{OcupacionId:int}"
 
 @inject OcupacionesBLL Ocupations
+
 
 
 <head>
@@ -9,7 +11,7 @@
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
     
     <style>
-          .Entrada{
+        .Entrada{
         display: inline-block;
         padding: 5px;
         align-items: center;
@@ -32,7 +34,7 @@
 <div class="Carta" style="display: block;">
 
     <div class="card-Header">
-        <h3>Nueva Ocupacion</h3>
+        <h3>Editar Ocupacion</h3>
     </div>
         <div class="Entrada">
         <label for="OcupacionID" >OcupacionID:</label>
@@ -49,6 +51,7 @@
     <br>
     <div class="card-Footer">
         <button class="btn btn-primary" @onclick="Guardar"><i class="fi fi-ss-disk"></i> Guardar</button>
+        <button class="btn btn-danger" @onclick="Eliminar"><i class="fi fi-ss-disk"></i> Eliminar</button>
     </div>
 </div>
 
@@ -91,36 +94,18 @@
     }
 
     public void Guardar()
-    {
-        if(Validar())
+    {   if(OcupacionId!=null)
+
+        if (Validar())
         {
-            if (Ocupations.Guardar(ocupacion))
-            {
-                Nuevo();
-            }
+            return;
         }
-
-    }
-    
-    public bool Validar()
-    {
-        bool valido = true;
-        if(
-            ocupacion.Descripcion == null ||
-            ocupacion.OcupacionId== null ||
-            ocupacion.Salario== null 
-
-
-        )
+        if (Ocupations.Guardar(ocupacion))
         {
-            valido=false;
+            Nuevo();
         }
-
-        return valido;
     }
     public void Eliminar()
-    {
-        if(!Ocupations.Existe(this.OcupacionId))
         {
             if(Ocupations.Eliminar(this.ocupacion))
             {
@@ -128,6 +113,13 @@
             }
             
         }
-    }
+    
+    public bool Validar ()
+    {
 
+        return this.ocupacion.Descripcion==null;
+    }
+    
 }
+
+

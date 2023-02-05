@@ -1,0 +1,176 @@
+﻿@page "/Persona"
+@page "/Persona/{PersonaId:int}"
+
+
+@inject PersonasBLL Persons
+@inject OcupacionesBLL Ocupations
+
+
+
+<head>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+
+    <style>
+        .Entrada {
+            display: inline-block;
+            padding: 5px;
+            align-items: center;
+        }
+
+        .Entrada input {
+            border-radius: 50px;
+            background-color: #D9D9D9;
+            border-color: #D9D9D9;
+            border: 15px;
+            margin: 5px;
+        }
+
+        .Entrada label {
+            margin: 5px;
+        }
+    </style>
+</head>
+
+
+<div class="Carta" style="display: block;">
+
+    <div class="card-Header">
+        <h3>Editar Persona</h3>
+    </div>
+    <div class="Entrada">
+        <label for="PersonaID">PersonaID:</label>
+        <input class="form-control" @bind="@Persona.PersonaId" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="PersonaID" name="PersonaID">
+    </div>
+    <div class="Entrada">
+        <label for="Nombre">Nombre:</label>
+        <input class="form-control" @bind="@Persona.Nombre" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="Nombre" name="Nombre">
+    </div>
+    <div class="Entrada">
+        <label for="Direccion">Direccion:</label>
+        <input class="form-control" @bind="@Persona.Direccion" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="Direccion" name="Direccion">
+    </div>
+    <div class="Entrada">
+        <label for="Email">Email:</label>
+        <input class="form-control" @bind="@Persona.Email" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="Email" name="Email">
+    </div>
+    <div class="Entrada">
+        <label for="F_Nacimiento">Fecha Nacimiento:</label>
+        <input type="date" @bind="Persona.F_Nacimiento" class="form-control" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="F_Nacimiento" name="F_Nacimiento">
+    </div>
+    <div class="Entrada">
+        <label for="Telefono">Telefono:</label>
+        <input class="form-control" @bind="@Persona.Telefono" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="Telefono" name="Telefono">
+    </div>
+    <div class="Entrada">
+        <label for="Celular">Celular:</label>
+        <input class="form-control" @bind="@Persona.Celular" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="Celular" name="Celular">
+    </div>
+
+    <div class="Entrada">
+        <label for="Ocupacion">Ocupacion:</label>
+        <select id="Ocupacion" name="Ocupacion" @bind="Persona.OcupacionId">
+            @foreach(var item in Ocupations.GetList())
+            {
+                <option value="@item.OcupacionId">@item.Descripcion</option>
+            }
+            
+        </select>
+    </div>
+    <br>
+    <div class="card-Footer">
+        <button class="btn btn-primary" @onclick="Guardar"><i class="fi fi-ss-disk"></i> Guardar</button>
+        <button class="btn btn-danger" @onclick="Eliminar"><i class="fi fi-ss-disk"></i> Eliminar</button>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+@code {
+    [Parameter]
+    public int PersonaId { get; set; }
+    public Persona? Persona { get; set; } = new Persona();
+    public Persona? PersonaEncontrada { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        if (PersonaId > 0)
+        {
+            this.Persona.PersonaId = PersonaId;
+            this.Buscar();
+        }
+    }
+
+    public void Buscar()
+    {
+
+        var PersonaEncontrada = Persons.Buscar(Persona.PersonaId);
+        if (PersonaEncontrada != null)
+        {
+            this.Persona = PersonaEncontrada;
+        }
+    }
+
+    public void Nuevo()
+    {
+        this.Persona = new Persona();
+    }
+
+        public void Guardar()
+    {
+        if(Validar())
+        {
+            if (Persons.Guardar(Persona))
+            {
+                Nuevo();
+            }
+        }
+
+    }
+    
+    public bool Validar()
+    {
+        bool valido = true;
+        if(
+            Persona.Nombre == null ||
+            Persona.Direccion == null ||
+            Persona.Email == null ||
+            Persona.Telefono == null ||
+            Persona.Celular == null ||
+            Persona.OcupacionId == null ||
+            Persona.F_Nacimiento == null 
+        )
+        {
+            valido=false;
+        }
+
+        return valido;
+    }
+    public void Eliminar()
+    {
+        if (Persons.Eliminar(this.Persona))
+        {
+            this.Persona = new Persona();
+        }
+
+    }
+
+
+
+}
+
+

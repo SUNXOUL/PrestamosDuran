@@ -52,7 +52,7 @@ namespace GestionPrestamosPersonales2023
         public Ocupaciones? Buscar(int ocupacionID)
         {
             return _contexto.Ocupaciones
-                    .Where(o => o.OcupacionId==ocupacionID).AsNoTracking().SingleOrDefault();
+                    .Where(o => o.OcupacionId==ocupacionID ).AsNoTracking().SingleOrDefault();
                     
         }
         public List<Ocupaciones> GetList()

@@ -1,71 +1,82 @@
-.page {
-    position: relative;
+
+header a{
+    text-decoration: none;
+}
+header{
+    background-color: #0077B6;
+    width: 100%;
+    position: sticky;
+    top: 0px;
+    z-index: 2;
+    display: inline-block;
+    left: 0px;
+    
+}
+.TopBar
+{
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
 }
 
-main {
-    flex: 1;
+.Logo
+{
+    height: 60px;
+    padding: 15px;
+    font-weight: bold;
 }
 
-.sidebar {
-    background-color: #04163D;
+.OptionsList a {
+    color:rgb(0, 0, 0) ;
+    display: inline-block;
+    padding: 10px ;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    
+
+}
+.Logo img{
+    height:200px;
+    position: absolute;
+    left:40%;
 }
 
-.top-row {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
-    justify-content: flex-end;
-    height: 3.5rem;
+.OptionsList a:hover{
+    color: #00B4D8;
+    
+}
+.OptionsList a:active
+{
+    color: #00B4D8;
+}
+
+.OptionsList{
+    background-color:rgb(255, 255, 255);
+
+}
+.About{
+    background-color:#CAF0F8;
+}
+.About h2,p{
+    color: white;
+    margin: 15px;
+}
+
+.Redes img{
+    height: 40px;
+}
+.Redes img:hover{
+    height: 60px;
+}
+.Redes a{
+    padding: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.Redes{
     display: flex;
-    align-items: center;
+    width: auto;
+    justify-content: right;
+    align-items: top;
+    height: 80px;
 }
 
-    .top-row ::deep a, .top-row .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-    }
 
-    .top-row a:first-child {
-        overflow: hidden;
-        
-        text-overflow: ellipsis;
-    }
-
-@media (max-width: 640.98px) {
-    .top-row:not(.auth) {
-        display: none;
-    }
-
-    .top-row.auth {
-        justify-content: space-between;
-    }
-
-    .top-row a, .top-row .btn-link {
-        margin-left: 0;
-    }
-}
-
-@media (min-width: 641px) {
-    .page {
-        flex-direction: row;
-    }
-
-    .sidebar {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
-    }
-
-    .top-row {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-    }
-
-    .top-row, article {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
-    }
-}

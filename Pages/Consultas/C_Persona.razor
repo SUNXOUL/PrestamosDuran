@@ -1,0 +1,146 @@
+﻿@page "/Personas"
+
+@inject PersonasBLL Persons
+@inject PrestamosBLL loans
+
+<head>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+    <style>
+        .Agregar :hover {
+            color: #0077B6;
+        }
+
+        .Agregar {
+            text-decoration: none;
+            color: black;
+            padding: 5px;
+            border: 5px;
+            border-color: #0077B6;
+        }
+
+        .Editar {
+            padding: 5px;
+            background-color: #329ad2;
+            color: black;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 25px;
+        }
+    </style>
+    <style>
+    </style>
+</head>
+
+<div style="display:flex; justify-content: space-between;">
+    <h3>Listado de Personas</h3>
+    <div>
+        <a class="Agregar" href="R_Persona" style="border: 0px; "><i class="fi fi-sr-add"> Agregar</i> </a>
+        <a class="Agregar" @onclick="Actualizar" style="border: 0px; "><i class="fi fi-br-refresh"> Actualizar</i> </a>
+    </div>
+</div>
+<br>
+<h6>Buscar</h6>
+<div style="display:flex;">
+    <input type="PersonaId" id="_PersonaId" class="form-control" @bind="PersonaId" placeholder="Ingrese ID">
+    <a type="button" href="Persona/@PersonaId" class="btn btn-primary"><i class="fi fi-br-search"></i> </a>
+</div>
+<br>
+<table class="table table-bordered table-striped" style="border-color: #edecec;">
+    <thead style="background-color: #0077B6">
+        <tr>
+            <th>#ID</th>
+            <th>Nombre</th>
+            <th>Telefono</th>
+            <th>Celular</th>
+            <th>Balance</th>
+            <th>Dirección</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Ocupacion</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Persons.GetList())
+        {
+            <tr>
+                <td>@item.PersonaId</td>
+                <td>@item.Nombre</td>
+                <td>@item.Telefono</td>
+                <td>@item.Celular</td>
+                <td>@item.Balance</td>
+                <td>@item.Direccion</td>
+                <td>@item.F_Nacimiento</td>
+                <td>@item.OcupacionId</td>
+                <td><a class="Editar" href="Persona/@item.PersonaId">Editar</a></td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public int PersonaId { get; set; }
+
+    public Persona? Persona { get; set; } = new Persona();
+    public Persona? PersonaEncontrada { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        if (PersonaId > 0)
+        {
+            this.Persona.PersonaId = PersonaId;
+            this.Buscar();
+        }
+
+
+    }
+
+    public void Buscar()
+    {
+
+        var PersonaEncontrada = Persons.Buscar(Persona.PersonaId);
+        if (PersonaEncontrada != null)
+        {
+            this.Persona = PersonaEncontrada;
+        }
+    }
+
+    public void Eliminar()
+    {
+        if (!Persons.Existe(this.PersonaId))
+        {
+            if (Persons.Eliminar(this.Persona))
+            {
+                this.Persona = new Persona();
+            }
+
+        }
+    }
+    public void Actualizar()
+    {
+        foreach (var Persona in Persons.GetList())
+        {
+            Persona.Balance = 0;
+
+            foreach (var Prestamo in loans.GetList())
+            {
+                if (Prestamo.PersonaId == Persona.PersonaId)
+                {
+                    Persona.Balance += Prestamo.Monto;
+
+                }
+            }
+
+            if (Persona.Balance != Persona.L_Balance)
+            {
+                Persons.Modificar(Persona);
+            }
+        }
+    }
+}

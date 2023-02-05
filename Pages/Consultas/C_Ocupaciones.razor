@@ -1,14 +1,54 @@
-﻿@page "/C_Ocupaciones"
+﻿@page "/Ocupaciones"
 
-<h3>Consulta Ocupaciones</h3>
+
 @inject OcupacionesBLL Ocupations
+<head>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <style>
+        .Agregar :hover{
+            color: #0077B6;
+        }
+        .Agregar{
+            text-decoration: none;
+            color: black;
+            padding: 5px;
+            border: 5px;
+            border-color:  #0077B6;
+        }
+        .Editar{
+            padding: 5px;
+            background-color: #329ad2;
+            color: black;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 25px;
+        }
+    </style>
+    <style>
+    </style>
+</head>
 
-<table class="table table-dark table-hover">
-    <thead>
+<div style="display:flex; justify-content: space-between;">
+<h3>Listado de  Ocupaciones</h3>
+<a class="Agregar" href="R_Ocupacion" style="border: 0px; "><i class="fi fi-sr-add"> Agregar</i> </a>
+</div>
+<br>
+<h6>Buscar</h6>
+<div style="display:flex;">
+ <input type="OcupacionID" id="_OcupacionID" class="form-control" @bind="OcupacionId" placeholder="Ingrese ID">
+<a type="button" href="Ocupacion/@OcupacionId" class="btn btn-primary"><i class="fi fi-br-search"></i> </a>
+</div>
+<br>
+<table class="table table-bordered table-striped" style="border-color: #edecec;">
+    <thead style="background-color: #0077B6">
         <tr>
-            <th>ID</th>
+            <th>#ID</th>
             <th>Descripcion</th>
             <th>Sueldo</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -18,10 +58,48 @@
                 <td>@item.OcupacionId</td>
                 <td>@item.Descripcion</td>
                 <td>@item.Salario</td>
+                <td><a class="Editar" href="Ocupacion/@item.OcupacionId">Editar</a></td>
             </tr>
         }
     </tbody>
 </table>
-@code {
 
+@code {
+        [Parameter]
+    public int OcupacionId { get; set; }
+
+    public Ocupaciones? ocupacion { get; set; } = new Ocupaciones();
+    public Ocupaciones? ocupacionEncontrada { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        if (OcupacionId > 0)
+        {
+            this.ocupacion.OcupacionId = OcupacionId;
+            this.Buscar();
+        }
+    }
+
+    public void Buscar()
+    {
+
+        var ocupacionEncontrada = Ocupations.Buscar(ocupacion.OcupacionId);
+        if (ocupacionEncontrada != null)
+        {
+            this.ocupacion = ocupacionEncontrada;
+        }
+    }
+
+        public void Eliminar()
+    {
+        if(!Ocupations.Existe(this.OcupacionId))
+        {
+            if(Ocupations.Eliminar(this.ocupacion))
+            {
+                this.ocupacion= new Ocupaciones();
+            }
+            
+        }
+    }
 }

@@ -1,0 +1,123 @@
+﻿@page "/Prestamos"
+
+
+@inject PrestamosBLL loans
+@inject PersonasBLL Persons
+<head>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <style>
+        .Agregar :hover{
+            color: #0077B6;
+        }
+        .Agregar{
+            text-decoration: none;
+            color: black;
+            padding: 5px;
+            border: 5px;
+            border-color:  #0077B6;
+        }
+        .Editar{
+            padding: 5px;
+            background-color: #329ad2;
+            color: black;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 25px;
+        }
+    </style>
+    <style>
+    </style>
+</head>
+
+<div style="display:flex; justify-content: space-between;">
+<h3>Listado de  Prestamos</h3>
+<a class="Agregar" href="R_Prestamo" style="border: 0px; "><i class="fi fi-sr-add"> Agregar</i> </a>
+</div>
+<br>
+<h6>Buscar</h6>
+<div style="display:flex;">
+ <input type="PrestamoID" id="_PrestamoID" class="form-control" @bind="PrestamoId" placeholder="Ingrese ID">
+<a type="button" href="Prestamo/@PrestamoId" class="btn btn-primary"><i class="fi fi-br-search"></i> </a>
+</div>
+<br>
+<table class="table table-bordered table-striped" style="border-color: #edecec;">
+    <thead style="background-color: #0077B6">
+        <tr>
+            <th>#ID</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha vencimiento</th>
+            <th>Persona ID#</th>
+            <th>Persona</th>
+            <th>Concepto</th>
+            <th>Monto</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in loans.GetList())
+        {
+            <tr>
+                <td>@item.PrestamoId</td>
+                <td>@item.F_Inicio</td>
+                <td>@item.F_Vencimiento</td>
+                <td>@item.PersonaId</td>
+                <td>
+                    @foreach (var Persona in Persons.GetList())
+                    {
+                        if(@item.PersonaId==Persona.PersonaId)
+                        {
+                            @Persona.Nombre
+                        }
+                    }
+                </td>
+                <td>@item.Concepto</td>
+                <td>@item.Monto</td>
+                <td><a class="Editar" href="Prestamo/@item.PrestamoId">Editar</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+        [Parameter]
+    public int PrestamoId { get; set; }
+
+    public Prestamo? Prestamo { get; set; } = new Prestamo();
+    public Prestamo? PrestamoEncontrada { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        if (PrestamoId > 0)
+        {
+            this.Prestamo.PrestamoId = PrestamoId;
+            this.Buscar();
+        }
+    }
+
+    public void Buscar()
+    {
+
+        var PrestamoEncontrada = loans.Buscar(Prestamo.PrestamoId);
+        if (PrestamoEncontrada != null)
+        {
+            this.Prestamo = PrestamoEncontrada;
+        }
+    }
+
+        public void Eliminar()
+    {
+        if(!loans.Existe(this.PrestamoId))
+        {
+            if(loans.Eliminar(this.Prestamo))
+            {
+                this.Prestamo= new Prestamo();
+            }
+            
+        }
+    }
+}
+

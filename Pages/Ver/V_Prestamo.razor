@@ -1,0 +1,166 @@
+﻿@page "/Prestamo"
+@page "/Prestamo/{PrestamoId:int}"
+
+
+@inject PrestamosBLL loans
+@inject PersonasBLL Persona
+
+<head>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+
+    <style>
+        .Entrada {
+            display: inline-block;
+            padding: 5px;
+            align-items: center;
+        }
+
+        .Entrada input {
+            border-radius: 50px;
+            background-color: #D9D9D9;
+            border-color: #D9D9D9;
+            border: 15px;
+            margin: 5px;
+        }
+
+        .Entrada label {
+            margin: 5px;
+        }
+    </style>
+</head>
+
+
+<div class="Carta" style="display: block;">
+
+    <div class="card-Header">
+        <h3>Editar Prestamo</h3>
+    </div>
+    <div class="Entrada">
+        <label for="PrestamoID">PrestamoID:</label>
+        <input class="form-control" @bind="@Prestamo.PrestamoId" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="PrestamoID" name="PrestamoID">
+    </div>
+
+    <div class="Entrada">
+        <label for="F_Inicio">Fecha Inicio:</label>
+        <input type="date" @bind="Prestamo.F_Inicio" class="form-control" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="F_Inicio" name="F_Inicio">
+    </div>
+    <div class="Entrada">
+        <label for="F_Vencimiento">Fecha vencimiento:</label>
+        <input type="date" @bind="Prestamo.F_Vencimiento" class="form-control" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="F_Inicio" name="F_Vencimiento">
+    </div>
+    <div class="Entrada">
+        <label for="Persona">Persona:</label>
+        <select id="Persona" name="Persona" @bind="Prestamo.PersonaId">
+            @foreach(var item in Persona.GetList())
+            {
+                <option value="@item.PersonaId"> @item.PersonaId | @item.Nombre</option>
+            }
+            
+        </select>
+    </div>
+    <div class="Entrada">
+        <label for="Concepto">Concepto:</label>
+        <input class="form-control" @bind="@Prestamo.Concepto" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="Concepto" name="Concepto">
+    </div>
+    <div class="Entrada">
+        <label for="Monto">Monto:</label>
+        <input class="form-control" @bind="@Prestamo.Monto" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="Monto" name="Monto">
+    </div>
+    <br>
+    <div class="card-Footer">
+        <button class="btn btn-primary" @onclick="Guardar"><i class="fi fi-ss-disk"></i> Guardar</button>
+        <button class="btn btn-danger" @onclick="Eliminar"><i class="fi fi-ss-disk"></i> Eliminar</button>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+@code {
+    [Parameter]
+    public int PrestamoId { get; set; }
+    public Prestamo? Prestamo { get; set; } = new Prestamo();
+    public Prestamo? PrestamoEncontrada { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        if (PrestamoId > 0)
+        {
+            this.Prestamo.PrestamoId = PrestamoId;
+            this.Buscar();
+        }
+    }
+
+    public void Buscar()
+    {
+
+        var PrestamoEncontrada = loans
+        .Buscar(Prestamo.PrestamoId);
+        if (PrestamoEncontrada != null)
+        {
+            this.Prestamo = PrestamoEncontrada;
+        }
+    }
+
+    public void Nuevo()
+    {
+        this.Prestamo = new Prestamo();
+    }
+
+    public void Guardar()
+    {
+        if(Validar())
+        {
+            if (loans.Guardar(Prestamo))
+            {
+                Nuevo();
+            }
+        }
+
+    }
+    
+    public bool Validar()
+    {
+        bool valido = true;
+        if(
+            Prestamo.PrestamoId == null ||
+            Prestamo.F_Inicio == null ||
+            Prestamo.F_Vencimiento == null ||
+            Prestamo.PersonaId == null ||
+            Prestamo.Monto == null ||
+            Prestamo.Concepto == null
+
+        )
+        {
+            valido=false;
+        }
+
+        return valido;
+    }
+    public void Eliminar()
+    {
+        if (loans
+        .Eliminar(this.Prestamo))
+        {
+            this.Prestamo = new Prestamo();
+        }
+
+    }
+
+
+
+}
+
+
