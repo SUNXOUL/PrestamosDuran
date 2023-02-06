@@ -20,12 +20,12 @@ namespace GestionPrestamosPersonales2023
 
     public bool Existe(int PrestamoId)
     {
-        return _contexto.Prestamos.Any(o => o.PrestamoId == PrestamoId);
+        return _contexto.Prestamo.Any(o => o.PrestamoId == PrestamoId);
     }
 
     private bool Insertar(Prestamo Prestamo)
     {
-        _contexto.Prestamos.Add(Prestamo);
+        _contexto.Prestamo.Add(Prestamo);
         int cantidad = _contexto.SaveChanges();
         return cantidad > 0;
     }
@@ -34,30 +34,32 @@ namespace GestionPrestamosPersonales2023
     {
         _contexto.Entry(Prestamo).State = EntityState.Modified;
         int cantidad = _contexto.SaveChanges();
+        _contexto.Entry(Prestamo).State = EntityState.Detached;
         return cantidad > 0;
     }
     
     public List<Prestamo> GetPrestamos()
     {
-        return _contexto.Prestamos.ToList();
+        return _contexto.Prestamo.ToList();
     }
 
         public bool Eliminar(Prestamo Prestamo)
         {
-            Console.WriteLine("eliminado");
             _contexto.Entry(Prestamo).State=EntityState.Deleted;
+            _contexto.Database.ExecuteSqlRaw($"DELETE FROM Prestamo WHERE PrestamoId={Prestamo.PrestamoId};");
+            _contexto.Entry(Prestamo).State = EntityState.Detached;
             return _contexto.SaveChanges()>0;
         }   
 
         public Prestamo? Buscar(int PrestamoID)
         {
-            return _contexto.Prestamos
+            return _contexto.Prestamo
                     .Where(o => o.PrestamoId==PrestamoID ).AsNoTracking().SingleOrDefault();
                     
         }
         public List<Prestamo> GetList()
         {
-            return _contexto.Prestamos.AsNoTracking().ToList();
+            return _contexto.Prestamo.AsNoTracking().ToList();
         }
     }
 }

@@ -14,6 +14,8 @@ builder.Services.AddDbContext<Contexto>(Options =>Options.UseSqlite(ConStr));
 builder.Services.AddScoped<OcupacionesBLL>();
 builder.Services.AddScoped<PersonasBLL>();
 builder.Services.AddScoped<PrestamosBLL>();
+builder.Services.AddScoped<PagosBLL>();
+builder.Services.AddScoped<PagosDetallesBLL>();
 
 
 // Add services to the container.

@@ -25,7 +25,7 @@ namespace GestionPrestamosPersonales2023.Migrations
 
                     b.HasKey("AdicionalesId");
 
-                    b.ToTable("Adicionales");
+                    b.ToTable("Adicionale");
                 });
 
             modelBuilder.Entity("GestionPrestamosPersonales2023.Estudiantes", b =>
@@ -36,7 +36,7 @@ namespace GestionPrestamosPersonales2023.Migrations
 
                     b.HasKey("EstudiantesId");
 
-                    b.ToTable("Estudiantes");
+                    b.ToTable("Estudiante");
                 });
 
             modelBuilder.Entity("GestionPrestamosPersonales2023.Nacionalidades", b =>
@@ -47,7 +47,7 @@ namespace GestionPrestamosPersonales2023.Migrations
 
                     b.HasKey("NacionalidadesId");
 
-                    b.ToTable("Nacionalidades");
+                    b.ToTable("Nacionalidade");
                 });
 
             modelBuilder.Entity("GestionPrestamosPersonales2023.Ocupaciones", b =>
@@ -65,6 +65,49 @@ namespace GestionPrestamosPersonales2023.Migrations
                     b.HasKey("OcupacionId");
 
                     b.ToTable("Ocupaciones");
+                });
+
+            modelBuilder.Entity("GestionPrestamosPersonales2023.Pago", b =>
+                {
+                    b.Property<int>("PagoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Concepto")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly>("Fecha")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Monto")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PersonaId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("PagoId");
+
+                    b.ToTable("Pago");
+                });
+
+            modelBuilder.Entity("GestionPrestamosPersonales2023.PagoDetalles", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PagoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PrestamoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double?>("ValorPagado")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PagoDetalles");
                 });
 
             modelBuilder.Entity("GestionPrestamosPersonales2023.Persona", b =>
@@ -102,7 +145,7 @@ namespace GestionPrestamosPersonales2023.Migrations
 
                     b.HasKey("PersonaId");
 
-                    b.ToTable("Personas");
+                    b.ToTable("Persona");
                 });
 
             modelBuilder.Entity("GestionPrestamosPersonales2023.Prestamo", b =>
@@ -128,7 +171,7 @@ namespace GestionPrestamosPersonales2023.Migrations
 
                     b.HasKey("PrestamoId");
 
-                    b.ToTable("Prestamos");
+                    b.ToTable("Prestamo");
                 });
 
             modelBuilder.Entity("GestionPrestamosPersonales2023.Tareas", b =>

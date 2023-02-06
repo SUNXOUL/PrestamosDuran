@@ -2,6 +2,9 @@
 
 @inject PersonasBLL Persons
 @inject PrestamosBLL loans
+@inject OcupacionesBLL ocupations
+@inject PagosBLL Pays
+@inject PagosDetallesBLL PaysDetails
 
 <head>
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
@@ -39,7 +42,6 @@
     <h3>Listado de Personas</h3>
     <div>
         <a class="Agregar" href="R_Persona" style="border: 0px; "><i class="fi fi-sr-add"> Agregar</i> </a>
-        <a class="Agregar" @onclick="Actualizar" style="border: 0px; "><i class="fi fi-br-refresh"> Actualizar</i> </a>
     </div>
 </div>
 <br>
@@ -74,13 +76,18 @@
                 <td>@item.Balance</td>
                 <td>@item.Direccion</td>
                 <td>@item.F_Nacimiento</td>
-                <td>@item.OcupacionId</td>
+                @foreach (var ocupaciones in ocupations.GetList())
+                {
+                    <td>@ocupaciones.Descripcion</td>
+                }
+                
                 <td><a class="Editar" href="Persona/@item.PersonaId">Editar</a></td>
 
             </tr>
         }
     </tbody>
 </table>
+
 
 @code {
     [Parameter]
@@ -97,7 +104,39 @@
             this.Persona.PersonaId = PersonaId;
             this.Buscar();
         }
+        foreach (var Persona in Persons.GetList())
+        {
+            Persona.Balance = 0;
 
+            foreach (var Prestamo in loans.GetList())
+            {
+                if (Prestamo.PersonaId == Persona.PersonaId)
+                {
+                    Persona.Balance += Prestamo.Monto;
+                    
+                    foreach(var PagoDetallado in PaysDetails.GetList())
+                    {
+                        if(Prestamo.PrestamoId == PagoDetallado.PrestamoId)
+                        {
+                            foreach(var Pago in Pays.GetList() )
+                            {
+                                if(Pago.PersonaId == PagoDetallado.PrestamoId)
+                                {
+                                    Persona.Balance-=Pago.Monto;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (Persona.Balance != Persona.L_Balance)
+            {
+                Persons.Modificar(Persona);
+                
+            }
+            
+        }
 
     }
 
@@ -121,26 +160,8 @@
             }
 
         }
+        
     }
-    public void Actualizar()
-    {
-        foreach (var Persona in Persons.GetList())
-        {
-            Persona.Balance = 0;
 
-            foreach (var Prestamo in loans.GetList())
-            {
-                if (Prestamo.PersonaId == Persona.PersonaId)
-                {
-                    Persona.Balance += Prestamo.Monto;
-
-                }
-            }
-
-            if (Persona.Balance != Persona.L_Balance)
-            {
-                Persons.Modificar(Persona);
-            }
-        }
-    }
+    
 }

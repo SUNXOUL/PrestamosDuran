@@ -34,6 +34,7 @@ namespace GestionPrestamosPersonales2023
     {
         _contexto.Entry(ocupacion).State = EntityState.Modified;
         int cantidad = _contexto.SaveChanges();
+        _contexto.Entry(ocupacion).State = EntityState.Detached;
         return cantidad > 0;
     }
     
@@ -44,8 +45,10 @@ namespace GestionPrestamosPersonales2023
 
         public bool Eliminar(Ocupaciones ocupacion)
         {
-            Console.WriteLine("eliminado");
+            
             _contexto.Entry(ocupacion).State=EntityState.Deleted;
+            _contexto.Database.ExecuteSqlRaw($"DELETE FROM Ocupaciones WHERE OcupacionId={ocupacion.OcupacionId};");
+            _contexto.Entry(ocupacion).State = EntityState.Detached;
             return _contexto.SaveChanges()>0;
         }   
 

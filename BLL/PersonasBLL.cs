@@ -20,12 +20,12 @@ namespace GestionPrestamosPersonales2023
 
     public bool Existe(int PersonaId)
     {
-        return _contexto.Personas.Any(o => o.PersonaId == PersonaId);
+        return _contexto.Persona.Any(o => o.PersonaId == PersonaId);
     }
 
     private bool Insertar(Persona Persona)
     {
-        _contexto.Personas.Add(Persona);
+        _contexto.Persona.Add(Persona);
         int cantidad = _contexto.SaveChanges();
         return cantidad > 0;
     }
@@ -34,30 +34,32 @@ namespace GestionPrestamosPersonales2023
     {
         _contexto.Entry(Persona).State = EntityState.Modified;
         int cantidad = _contexto.SaveChanges();
+        _contexto.Entry(Persona).State = EntityState.Detached;
         return cantidad > 0;
     }
     
     public List<Persona> GetPersonas()
     {
-        return _contexto.Personas.ToList();
+        return _contexto.Persona.ToList();
     }
 
         public bool Eliminar(Persona Persona)
         {
-            Console.WriteLine("eliminado");
             _contexto.Entry(Persona).State=EntityState.Deleted;
+            _contexto.Database.ExecuteSqlRaw($"DELETE FROM Persona WHERE PersonaId={Persona.PersonaId};");
+            _contexto.Entry(Persona).State = EntityState.Detached;
             return _contexto.SaveChanges()>0;
         }   
 
         public Persona? Buscar(int PersonaID)
         {
-            return _contexto.Personas
+            return _contexto.Persona
                     .Where(o => o.PersonaId==PersonaID ).AsNoTracking().SingleOrDefault();
                     
         }
         public List<Persona> GetList()
         {
-            return _contexto.Personas.AsNoTracking().ToList();
+            return _contexto.Persona.AsNoTracking().ToList();
         }
     }
 }

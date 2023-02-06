@@ -1,0 +1,154 @@
+﻿@page "/Pagos"
+
+
+@inject PagosBLL Pays
+@inject PagosDetallesBLL PaysDetails
+@inject PersonasBLL Persons
+
+<head>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <style>
+        .Agregar :hover{
+            color: #0077B6;
+        }
+        .Agregar{
+            text-decoration: none;
+            color: black;
+            padding: 5px;
+            border: 5px;
+            border-color:  #0077B6;
+        }
+        .Editar{
+            padding: 5px;
+            background-color: #329ad2;
+            color: black;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 25px;
+        }
+    </style>
+    <style>
+    </style>
+</head>
+
+<div style="display:flex; justify-content: space-between;">
+<h3>Listado de Pagos</h3>
+<a class="Agregar" href="R_Pago" style="border: 0px; "><i class="fi fi-sr-add"> Agregar</i> </a>
+</div>
+<br>
+<h6>Buscar</h6>
+<div style="display:flex;">
+ <input type="PagoID" id="_PagoID" class="form-control" @bind="PagoId" placeholder="Ingrese ID">
+<a type="button" href="Pago/@PagoId" class="btn btn-primary"><i class="fi fi-br-search"></i> </a>
+</div>
+<br>
+<table class="table table-bordered table-striped" style="border-color: #edecec;">
+    <thead style="background-color: #0077B6">
+        <tr>
+            <th>#ID</th>
+            <th>Persona ID</th>
+            <th>Persona</th>
+            <th>Prestamo ID</th>
+            <th>Monto</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Pays.GetList())
+        {
+            <tr>
+                <td>@item.PagoId</td>
+                <td>@item.PersonaId</td>
+                @foreach (var persona in Persons.GetList())
+                {
+                    if(persona.PersonaId == item.PersonaId)
+                    {
+                        <td>@persona.Nombre</td>
+                    }
+                }
+                @foreach (var prestamo in PaysDetails.GetList())
+                {
+                    if(prestamo.PagoId == item.PagoId)
+                    {
+                        <td>@prestamo.PrestamoId</td>
+                    }
+                }
+                @foreach (var prestamo in PaysDetails.GetList())
+                {
+                    if(prestamo.PagoId == item.PagoId)
+                    {
+                        <td>@prestamo.ValorPagado</td>
+                    }
+                }
+                <td><a class="Editar" href="Pago/@item.PagoId">Editar</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+        [Parameter]
+    public int PagoId { get; set; }
+
+    public Pago? Pago { get; set; } = new Pago();
+    public PagoDetalles PagoDetalles{get;set;}
+    public int Detalles {get;set;}
+    
+
+
+    protected override void OnInitialized()
+    {
+        if (PagoId > 0)
+        {
+            this.Pago.PagoId = PagoId;
+            this.Buscar();
+        }
+    }
+
+    public void Buscar()
+    {
+
+        var PagoEncontrada = Pays.Buscar(Pago.PagoId);
+        if (PagoEncontrada != null)
+        {
+            this.Pago = PagoEncontrada;
+        }
+
+        
+
+        foreach(var DetallesId in PaysDetails.GetList())
+        {
+            if(Pago.PagoId == DetallesId.PagoId)
+            {
+                Detalles = DetallesId.Id;
+            }
+        }
+
+        var PagoDetallesEncontrado = PaysDetails.Buscar(Detalles);
+        if (PagoEncontrada != null)
+        {
+            this.Pago = PagoEncontrada;
+        }
+    }
+        public void Nuevo()
+    {
+        this.Pago = new Pago();
+        this.PagoDetalles = new PagoDetalles();
+    }
+
+        public void Eliminar()
+    {
+        if(!Pays.Existe(this.PagoId))
+        {
+            if(Pays.Eliminar(this.Pago))
+            {
+                Nuevo();
+            }
+            
+        }
+
+    }
+}

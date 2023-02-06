@@ -12,7 +12,7 @@ namespace GestionPrestamosPersonales2023.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Adicionales",
+                name: "Adicionale",
                 columns: table => new
                 {
                     AdicionalesId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -20,11 +20,11 @@ namespace GestionPrestamosPersonales2023.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Adicionales", x => x.AdicionalesId);
+                    table.PrimaryKey("PK_Adicionale", x => x.AdicionalesId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Estudiantes",
+                name: "Estudiante",
                 columns: table => new
                 {
                     EstudiantesId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -32,11 +32,11 @@ namespace GestionPrestamosPersonales2023.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Estudiantes", x => x.EstudiantesId);
+                    table.PrimaryKey("PK_Estudiante", x => x.EstudiantesId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Nacionalidades",
+                name: "Nacionalidade",
                 columns: table => new
                 {
                     NacionalidadesId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -44,7 +44,7 @@ namespace GestionPrestamosPersonales2023.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Nacionalidades", x => x.NacionalidadesId);
+                    table.PrimaryKey("PK_Nacionalidade", x => x.NacionalidadesId);
                 });
 
             migrationBuilder.CreateTable(
@@ -62,7 +62,38 @@ namespace GestionPrestamosPersonales2023.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Personas",
+                name: "Pago",
+                columns: table => new
+                {
+                    PagoId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Fecha = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    PersonaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Concepto = table.Column<string>(type: "TEXT", nullable: true),
+                    Monto = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pago", x => x.PagoId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PagoDetalles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    PagoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PrestamoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ValorPagado = table.Column<double>(type: "REAL", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PagoDetalles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Persona",
                 columns: table => new
                 {
                     PersonaId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -79,11 +110,11 @@ namespace GestionPrestamosPersonales2023.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Personas", x => x.PersonaId);
+                    table.PrimaryKey("PK_Persona", x => x.PersonaId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Prestamos",
+                name: "Prestamo",
                 columns: table => new
                 {
                     PrestamoId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -96,7 +127,7 @@ namespace GestionPrestamosPersonales2023.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Prestamos", x => x.PrestamoId);
+                    table.PrimaryKey("PK_Prestamo", x => x.PrestamoId);
                 });
 
             migrationBuilder.CreateTable(
@@ -129,22 +160,28 @@ namespace GestionPrestamosPersonales2023.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Adicionales");
+                name: "Adicionale");
 
             migrationBuilder.DropTable(
-                name: "Estudiantes");
+                name: "Estudiante");
 
             migrationBuilder.DropTable(
-                name: "Nacionalidades");
+                name: "Nacionalidade");
 
             migrationBuilder.DropTable(
                 name: "Ocupaciones");
 
             migrationBuilder.DropTable(
-                name: "Personas");
+                name: "Pago");
 
             migrationBuilder.DropTable(
-                name: "Prestamos");
+                name: "PagoDetalles");
+
+            migrationBuilder.DropTable(
+                name: "Persona");
+
+            migrationBuilder.DropTable(
+                name: "Prestamo");
 
             migrationBuilder.DropTable(
                 name: "Tareas");

@@ -1,0 +1,207 @@
+﻿@page "/R_Pago"
+
+@inject PagosBLL Pays
+@inject PagosDetallesBLL PaysDetails
+@inject PersonasBLL Persons
+@inject PrestamosBLL Loans
+
+<head>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+
+    <style>
+        .Entrada {
+            display: inline-block;
+            padding: 5px;
+            align-items: center;
+        }
+        .Entrada select {
+            width: 200px;
+            height: 35px;
+            border-radius: 50px;
+            background-color: #D9D9D9;
+            border-color: #D9D9D9;
+            border: 15px;
+            margin: 5px;
+        }
+        .Entrada input {
+            border-radius: 50px;
+            background-color: #D9D9D9;
+            border-color: #D9D9D9;
+            border: 15px;
+            margin: 5px;
+        }
+
+        .Entrada label {
+            margin: 5px;
+        }
+    </style>
+</head>
+
+
+<div class="Carta" style="display: block;">
+
+    <div class="card-Header">
+        <h3>Nuevo Pago</h3>
+    </div>
+    <div class="Entrada">
+        <label for="PagoID">PagoID:</label>
+        <input class="form-control" @bind="@Pago.PagoId" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="PagoID" name="PagoID">
+    </div>
+    <div class="Entrada">
+        <label for="F_Pago">Fecha Pago:</label>
+        <input type="date" @bind="Pago.Fecha" class="form-control" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="F_Inicio" name="F_Pago">
+    </div>
+        <div class="Entrada">
+        <label for="Persona">Persona:</label>
+        <select id="Persona" name="Persona" @bind="Pago.PersonaId">
+            @foreach(var item in Persons.GetList())
+            {
+
+                <option value="@item.PersonaId"> @item.PersonaId | @item.Nombre</option>
+            }
+            
+        </select>
+        </div>
+            <div class="Entrada">
+        <label for="Prestamo">Prestamo:</label>
+        <select id="Prestamo" name="Prestamo" @bind="PagoDetalles.PrestamoId">
+            <option></option>
+            @foreach(var item in Loans.GetList())
+            {
+                    if(item.PersonaId == @Pago.PersonaId)
+                    {
+                        
+                        <option value="@item.PrestamoId"> @item.PrestamoId | @item.Concepto</option>
+                    }
+                
+            }
+            
+        </select>
+    
+    </div>
+
+        <div class="Entrada">
+        <label for="Concepto">Concepto:</label>
+        <input class="form-control" @bind="@Pago.Concepto" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="Concepto" name="Concepto">
+    </div>
+        <div class="Entrada">
+        <label for="Monto">Monto:</label>
+        <input class="form-control" @bind="@Pago.Monto" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="Monto" name="Monto">
+    </div>
+    <br>
+    <div class="card-Footer">
+        <button class="btn btn-success" @onclick="Nuevo"><i class="fi fi-sr-add document"></i> Nuevo</button>
+        <button class="btn btn-primary" @onclick="Guardar"><i class="fi fi-ss-disk"></i> Guardar</button>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+@code {
+    [Parameter]
+    public int PagoId { get; set; }
+    public Pago Pago { get; set; } = new Pago();
+    public PagoDetalles PagoDetalles{get;set;} = new PagoDetalles();
+    public PagoDetalles PagoDetallesEncontrado{get;set;} = new PagoDetalles();
+    public int Detalles{get;set;}
+
+    public int? PersonaId{set;get;}
+    public Pago? PagoEncontrado { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        if (PagoId > 0)
+        {
+            this.Pago.PagoId = PagoId;
+            this.Buscar();
+        }
+    }
+
+    public void Buscar()
+    {
+
+        var PagoEncontrada = Pays.Buscar(Pago.PagoId);
+        if (PagoEncontrada != null)
+        {
+            this.Pago = PagoEncontrada;
+        }
+
+        
+
+        foreach(var DetallesId in PaysDetails.GetList())
+        {
+            if(Pago.PagoId == DetallesId.PagoId)
+            {
+                Detalles = DetallesId.Id;
+            }
+        }
+
+        var PagoDetallesEncontrado = PaysDetails.Buscar(Detalles);
+        if (PagoEncontrada != null)
+        {
+            this.Pago = PagoEncontrada;
+        }
+
+    }
+
+    public void Nuevo()
+    {
+        this.Pago = new Pago();
+        this.PagoDetalles = new PagoDetalles();
+    }
+    public void Seleccionar()
+    {
+        PersonaId = Pago.PersonaId;
+    }
+
+    public void Guardar()
+    {
+        if (Validar())
+        {
+            if (Pays.Guardar(Pago))
+            {
+                PagoDetalles.PagoId=Pago.PagoId;
+                PagoDetalles.ValorPagado=Pago.Monto;
+
+                if(PaysDetails.Guardar(PagoDetalles))
+                {
+                    Nuevo();
+                }
+            }
+        }
+
+
+
+    }
+
+    public bool Validar()
+    {
+        bool valido = true;
+
+
+        return valido;
+    }
+    public void Eliminar()
+    {
+        if (!Pays.Existe(this.PagoId))
+        {
+            if (Pays.Eliminar(this.Pago))
+            {
+                this.Pago = new Pago();
+            }
+        }
+    }
+
+}

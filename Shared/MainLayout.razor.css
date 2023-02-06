@@ -40,7 +40,9 @@ header{
 }
 
 .OptionsList a:hover{
+    
     color: #00B4D8;
+
     
 }
 .OptionsList a:active
@@ -78,5 +80,12 @@ header{
     align-items: top;
     height: 80px;
 }
-
+footer{
+    background-color:  #D9D9D9;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    min-height: 15%;
+    width: 100%;
+}
 
