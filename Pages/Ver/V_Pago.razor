@@ -17,6 +17,7 @@
             padding: 5px;
             align-items: center;
         }
+
         .Entrada select {
             width: 200px;
             height: 35px;
@@ -26,6 +27,7 @@
             border: 15px;
             margin: 5px;
         }
+
         .Entrada input {
             border-radius: 50px;
             background-color: #D9D9D9;
@@ -48,52 +50,48 @@
     </div>
     <div class="Entrada">
         <label for="PagoID">PagoID:</label>
-        <input class="form-control" @bind="@Pago.PagoId" aria-label="Recipient's username"
-            aria-describedby="basic-addon2" id="PagoID" name="PagoID">
+        <input class="form-control" @bind="@Pago.PagoId" aria-label="Recipient's username" aria-describedby="basic-addon2" id="PagoID" name="PagoID">
     </div>
     <div class="Entrada">
         <label for="F_Pago">Fecha Pago:</label>
-        <input type="date" @bind="Pago.Fecha" class="form-control" aria-label="Recipient's username"
-            aria-describedby="basic-addon2" id="F_Inicio" name="F_Pago">
+        <input type="date" @bind="Pago.Fecha" class="form-control" aria-label="Recipient's username" aria-describedby="basic-addon2" id="F_Inicio" name="F_Pago">
     </div>
-        <div class="Entrada">
+    <div class="Entrada">
         <label for="Persona">Persona:</label>
         <select id="Persona" name="Persona" @bind="Pago.PersonaId">
-            @foreach(var item in Persons.GetList())
+            @foreach (var item in Persons.GetList())
             {
                 <option value="@item.PersonaId"> @item.PersonaId | @item.Nombre</option>
             }
-            
+
         </select>
-        </div>
-            <div class="Entrada">
+    </div>
+    <div class="Entrada">
         <label for="Prestamo">Prestamo:</label>
         <select id="Prestamo" name="Prestamo" @bind="PagoDetalles.PrestamoId">
-            @foreach(var item in Loans.GetList())
+            @foreach (var item in Loans.GetList())
             {
-                if(item.PersonaId == Pago.PersonaId)
+                if (item.PersonaId == Pago.PersonaId)
                 {
                     <option value="@item.PrestamoId"> @item.PrestamoId | @item.Concepto</option>
                 }
-                
+
             }
-            
+
         </select>
     </div>
-        <div class="Entrada">
+    <div class="Entrada">
         <label for="Concepto">Concepto:</label>
-        <input class="form-control" @bind="@Pago.Concepto" aria-label="Recipient's username"
-            aria-describedby="basic-addon2" id="Concepto" name="Concepto">
+        <input class="form-control" @bind="@Pago.Concepto" aria-label="Recipient's username"aria-describedby="basic-addon2" id="Concepto" name="Concepto">
     </div>
-        <div class="Entrada">
+    <div class="Entrada">
         <label for="Monto">Monto:</label>
-        <input class="form-control" @bind="@Pago.Monto" aria-label="Recipient's username"
-            aria-describedby="basic-addon2" id="Monto" name="Monto">
+        <input class="form-control" @bind="@Pago.Monto" aria-label="Recipient's username" aria-describedby="basic-addon2" id="Monto" name="Monto">
     </div>
     <br>
     <div class="card-Footer">
         <button class="btn btn-primary" @onclick="Guardar"><i class="fi fi-ss-disk"></i> Guardar</button>
-        <button class="btn btn-danger" @onclick="Eliminar"><i class="fi fi-ss-disk"></i> Eliminar</button>
+        <a href="/Pago" ><button class="btn btn-danger" @onclick="Eliminar"><i class="fi fi-ss-disk"></i> Eliminar</button></a>
     </div>
 </div>
 
@@ -108,9 +106,9 @@
     [Parameter]
     public int PagoId { get; set; }
     public Pago? Pago { get; set; } = new Pago();
-    public PagoDetalles PagoDetalles{get;set;} = new PagoDetalles();
-    public PagoDetalles PagoDetallesEncontrado{get;set;} = new PagoDetalles();
-    public int Detalles{get;set;}
+    public PagoDetalles PagoDetalles { get; set; } = new PagoDetalles();
+    public PagoDetalles PagoDetallesEncontrado { get; set; } = new PagoDetalles();
+    public int Detalles { get; set; }
 
     public Pago? PagoEncontrado { get; set; }
 
@@ -134,11 +132,11 @@
             this.Pago = PagoEncontrada;
         }
 
-        
 
-        foreach(var DetallesId in PaysDetails.GetList())
+
+        foreach (var DetallesId in PaysDetails.GetList())
         {
-            if(Pago.PagoId == DetallesId.PagoId)
+            if (Pago.PagoId == DetallesId.PagoId)
             {
                 Detalles = DetallesId.Id;
             }
@@ -167,9 +165,9 @@
         {
             if (Pays.Guardar(Pago))
             {
-                PagoDetalles.PagoId=Pago.PagoId;
-                PagoDetalles.ValorPagado=Pago.Monto;
-                if(PaysDetails.Guardar(PagoDetalles))
+                PagoDetalles.PagoId = Pago.PagoId;
+                PagoDetalles.ValorPagado = Pago.Monto;
+                if (PaysDetails.Guardar(PagoDetalles))
                 {
                     Nuevo();
                 }
@@ -183,31 +181,41 @@
     public bool Validar()
     {
         bool valido = true;
-
+        if (
+        Pago.PagoId == null ||
+        Pago.Concepto == null ||
+        Pago.Fecha == null ||
+        Pago.PersonaId == null ||
+        Pago.Monto == null ||
+        PagoDetalles.PrestamoId == null
+        )
+        {
+            valido = false;
+        }
 
         return valido;
     }
     public void Eliminar()
     {
-        if (Pays.Existe(this.PagoId))
-        {
-
-            if (Pays.Eliminar(this.Pago))
+            if (Pays.Existe(this.PagoId))
             {
-                        
-                this.Pago = new Pago();
-            }
-        
-        if (!PaysDetails.Existe(this.PagoDetalles.Id))
-        {
-            if (PaysDetails.Eliminar(this.PagoDetalles))
-            {
-                
-                this.PagoDetalles = new PagoDetalles();
-            }
-        }
 
-        }
+                if (Pays.Eliminar(this.Pago))
+                {
+
+                    this.Pago = new Pago();
+                }
+
+                if (!PaysDetails.Existe(this.PagoDetalles.Id))
+                {
+                    if (PaysDetails.Eliminar(this.PagoDetalles))
+                    {
+
+                        this.PagoDetalles = new PagoDetalles();
+                    }
+                }
+
+            }
     }
 
 }

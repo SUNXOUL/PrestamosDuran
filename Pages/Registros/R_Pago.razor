@@ -189,7 +189,17 @@
     public bool Validar()
     {
         bool valido = true;
-
+        if (
+        Pago.PagoId == null ||
+        Pago.Concepto == null ||
+        Pago.Fecha == null ||
+        Pago.PersonaId == null ||
+        Pago.Monto == null ||
+        PagoDetalles.PrestamoId == null
+        )
+        {
+            valido = false;
+        }
 
         return valido;
     }

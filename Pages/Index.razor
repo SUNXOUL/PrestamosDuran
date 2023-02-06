@@ -1,10 +1,94 @@
 ﻿@page "/"
 
+@inject PrestamosBLL Loans
+@inject OcupacionesBLL Ocupations
+@inject PagosBLL Pays
+@inject PersonasBLL Persons
+
+
 <PageTitle>Inicio</PageTitle>
+<head>
+              <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css'>
+            <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+            <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
+            <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
 
-<div class="mt-4 p-5 text-white rounded" style="background-color:#0077B6;">
-  <h1>BIENVENIDOS A PRESTAMOS DURAN SYSTEM</h1>
-  <p>   un sistema de prestamos automatizados</p>
+
+
+        <style>
+            .Contenido
+            {
+              display: flex;
+              padding: 1%;
+              padding-top: 1%;
+              width: 100%;
+              
+            }
+
+              .Imagen 
+            {
+              width: 100%;
+              display: flex;
+              justify-content: right;
+              background-image: url("https://images.pexels.com/photos/5849563/pexels-photo-5849563.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+              background-repeat: no-repeat;
+              background-size: cover;
+              margin: 2%;
+              border-radius: 25px;
+            }
+            .page
+            {
+              overflow-x: hidden;
+              overflow-y: hidden;
+            }
+
+
+
+        </style>
+  </head>
+  <div class="page">
+  <div class="mt-4 p-5 text-white rounded" style="background-color:#0077B6; border-radius: 15px;">
+    <h1>BIENVENIDOS A PRESTAMOS DURAN SYSTEM</h1>
+    <p>   un sistema de prestamos automatizados</p>
+  </div>
+  <div class="Contenido">
+  <div style="display: inline-block; padding:1%;  ">
+
+
+    <div class="card text-bg-primary mb-3" style="max-width: 18rem; background-color:#0096c7;border-radius: 10px; color:rgb(255, 255, 255);">
+      <div class="card-header" style="display: flex; justify-content:center;"><a class="Agregar" href="R_Ocupacion" style="border: 0px ; text-decoration: none; color:rgb(255, 255, 255);"><i class="fi fi-sr-add"> Agregar</i> </a></div>
+      <div class="card-body" style="display: flex; justify-content:center;">
+        <h3 class="card-title"> @Ocupations.GetList().Count Ocupaciones</h3>
+      </div>
+      </div>
+
+        <div class="card text-bg-primary mb-3" style="max-width: 18rem; background-color:#00b4d8;border-radius: 10px; color:rgb(255, 255, 255);">
+      <div class="card-header" style="display: flex; justify-content:center;"><a class="Agregar" href="R_Persona" style="border: 0px ; text-decoration: none; color:rgb(255, 255, 255);"><i class="fi fi-sr-add"> Agregar</i> </a></div>
+      <div class="card-body" style="display: flex; justify-content:center;">
+        <h3 class="card-title"> @Persons.GetList().Count Personas</h3>
+      </div>
+      </div>
+
+        <div class="card text-bg-primary mb-3" style="max-width: 18rem; background-color:#48cae4;border-radius: 10px; color:rgb(255, 255, 255);">
+      <div class="card-header" style="display: flex; justify-content:center;"><a class="Agregar" href="R_Prestamo" style="border: 0px ; text-decoration: none; color:rgb(255, 255, 255);"><i class="fi fi-sr-add"> Agregar</i> </a></div>
+      <div class="card-body" style="display: flex; justify-content:center;">
+        <h3 class="card-title"> @Loans.GetList().Count Prestamos</h3>
+      </div>
+      </div>
+
+      <div class="card text-bg-primary mb-3" style="max-width: 18rem; background-color:#48cae4 ;border-radius: 10px; color:rgb(255, 255, 255);">
+      <div class="card-header" style="display: flex; justify-content:center;"><a class="Agregar" href="R_Pago" style="border: 0px ; text-decoration: none; color:rgb(255, 255, 255);"><i class="fi fi-sr-add"> Agregar</i> </a></div>
+      <div class="card-body" style="display: flex; justify-content:center;">
+        <h3 class="card-title"> @Pays.GetList().Count Pagos</h3>
+      </div>
+      </div>
+
+
+  
+
+  </div>
+      <div class="Imagen">
+        
+    </div>
+    </div>
 </div>
-
-<SurveyPrompt Title="How is Blazor working for you?" />

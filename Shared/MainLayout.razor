@@ -3,46 +3,71 @@
 <PageTitle>GestionPrestamosPersonales2023</PageTitle>
 <head>
 </head>
+<div class="Master" >
 
-<div class="page" >
-
-    <head>
-        <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css'>
-        <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
-        <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    
-    <header>
-        <div class="TopBar">
-            <div class="LogoDiv" >
-            <a href="/"><img  class="Logo" src='https://blogger.googleusercontent.com/img/a/AVvXsEgvg0gmh6YOul7jHZ_IDjs7LJrtv1IdAfb_1gPtRq9QEBRR3M9vtqhSZ7oDgeEjBVbDZoBEK1VEKws7MLyKFUXn6w6j4BF1Udtf7JkTpOms9rhQyiw9lHR6q5_P4kCiKascFFa_G1MigNcKmDWqlmCYHGfuU6TWYmZQVhZdfP7d4JacbFbVkWx_SkQt'><span style="color:white;">PRESTAMOS</span><span style="color: #00B4D8;"> DURAN</span></a>
-            </div>
-            <button class="btn btn-primary" style="border: 0px; padding:10px;"><i class="fi fi-rs-mode-portrait"> User</i></button>
-            
-
+    <div class="@NavMenuCssClass nav-scrollable Sidebar" @onclick="ToggleNavMenu">
+        <div style="background-image: url(https://images.pexels.com/photos/4386149/pexels-photo-4386149.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);background-repeat: no-repeat;background-size: cover;padding:1%;">
+        <div style="display: flex; width:100%; justify-content:center; padding:10%">
+        <img  src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjTILE248dSmRZTZ2HLqVdKRHLp3S9_oInLyHmGCEdlS7gxVRrjLYQ3KR6pwIPtquBfgTlrsZGhHArYl-_9E0o7SK-F6pqbGIHYY7s9GkSTYNgpg7yvCbXgUElVINDIn6jUusvjns9-y3VB2GSnbaKQ1C56SoG7pjKbUwja-ZQ3H1Gm4JbCDFV3_Z5E/s320/user.png" style="width: 60%;">
         </div>
-        <nav class="OptionsList">
-            <a href="" class="MenuOp"><i class="fi fi-ss-house chimney blank"></i> Inicio</a>
-            <a href="Ocupaciones" class="MenuOp"> <i class="fi fi-sr-briefcase"></i> Ocupaciones</a>
-            <a href="Personas" class="MenuOp"> <i class="fi fi-sr-user"></i> Personas</a>
-            <a href="Prestamos" class="MenuOp"><i class="fi fi-sr-usd-circle"></i> Prestamos</a>
-            <a href="Pagos" class="MenuOp"><i class="fi fi-sr-credit-card"></i> Pagos</a>
-        </nav>
-    
+        <h3 style="display: flex; width:100%; justify-content:center; color:rgb(0, 0, 0); background-color:rgb(241, 241, 241); border-radius:25px;">USER</h3> 
+        </div>
+    </div>
 
-    </header>
-    
+    <div class="page"  >
+        
+        <head>
+            <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css'>
+            <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+            <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
+            <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        
+        <header>
+            <div class="TopBar">
+                        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu"><i class="fi fi-br-menu-burger"></i></button>
+                <div class="LogoDiv" >
+                <a href="/"><img  class="Logo" src='https://blogger.googleusercontent.com/img/a/AVvXsEgvg0gmh6YOul7jHZ_IDjs7LJrtv1IdAfb_1gPtRq9QEBRR3M9vtqhSZ7oDgeEjBVbDZoBEK1VEKws7MLyKFUXn6w6j4BF1Udtf7JkTpOms9rhQyiw9lHR6q5_P4kCiKascFFa_G1MigNcKmDWqlmCYHGfuU6TWYmZQVhZdfP7d4JacbFbVkWx_SkQt'><span style="color:white;">PRESTAMOS</span><span style="color: #00B4D8; "> DURAN</span></a>
+                </div>
+                <button class="btn btn-primary" style="border: 0px; padding:10px;"><i class="fi fi-rs-mode-portrait"> User</i></button>
+                
 
-    <main>
+            </div>
+            <nav class="OptionsList">
+                <a href="" class="MenuOp"><i class="fi fi-ss-house chimney blank"></i> Inicio</a>
+                <a href="Ocupaciones" class="MenuOp"> <i class="fi fi-sr-briefcase"></i> Ocupaciones</a>
+                <a href="Personas" class="MenuOp"> <i class="fi fi-sr-user"></i> Personas</a>
+                <a href="Prestamos" class="MenuOp"><i class="fi fi-sr-usd-circle"></i> Prestamos</a>
+                <a href="Pagos" class="MenuOp"><i class="fi fi-sr-credit-card"></i> Pagos</a>
+            </nav>
+        
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+        </header>
+        
 
-<footer>
+        <main>
 
-</footer>
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
+
+    <footer>
+
+    </footer>
+</div>
 
 </div>
+
+@code{
+
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
