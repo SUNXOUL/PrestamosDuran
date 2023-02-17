@@ -37,12 +37,6 @@ namespace GestionPrestamosPersonales2023
         _contexto.Entry(Pago).State = EntityState.Detached;
         return cantidad > 0;
     }
-    
-    public List<Pago> GetPagos()
-    {
-        return _contexto.Pago.ToList();
-    }
-
         public bool Eliminar(Pago Pago)
         {
             _contexto.Entry(Pago).State=EntityState.Deleted;
@@ -55,11 +49,11 @@ namespace GestionPrestamosPersonales2023
         {
             return _contexto.Pago
                     .Where(o => o.PagoId==PagoID ).AsNoTracking().SingleOrDefault();
-                    
+
         }
         public List<Pago> GetList()
         {
-            return _contexto.Pago.AsNoTracking().ToList();
+            return _contexto.Pago.Where(o=>o.PagoId!=0).AsNoTracking().ToList();
         }
     }
 }

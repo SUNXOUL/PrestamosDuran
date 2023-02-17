@@ -10,7 +10,7 @@ using GestionPrestamosPersonales2023;
 var builder = WebApplication.CreateBuilder(args);
 var ConStr = builder.Configuration.GetConnectionString("ConStr");
 builder.Services.AddDbContext<Contexto>(Options =>Options.UseSqlite(ConStr));
-
+ 
 builder.Services.AddScoped<OcupacionesBLL>();
 builder.Services.AddScoped<PersonasBLL>();
 builder.Services.AddScoped<PrestamosBLL>();
