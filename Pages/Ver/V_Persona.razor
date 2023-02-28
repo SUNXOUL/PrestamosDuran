@@ -4,7 +4,7 @@
 
 @inject PersonasBLL Persons
 @inject OcupacionesBLL Ocupations
-
+@inject NotificationService notificationService
 
 
 <head>
@@ -123,7 +123,10 @@
             this.Buscar();
         }
     }
-
+    void ShowNotification(NotificationMessage message)
+    {
+        notificationService.Notify(message);
+    }
     public void Buscar()
     {
 
@@ -139,7 +142,7 @@
         this.Persona = new Persona();
     }
 
-        public void Guardar()
+    public void Guardar()
     {
         if(Validar())
         {
@@ -147,6 +150,12 @@
             {
                 Nuevo();
             }
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Registro Actualizado", Detail = "Modificado con Exito", Duration = 4000 });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error de registro", Detail = "Campos Invalidos", Duration = 4000 });
+            
         }
 
     }
@@ -174,6 +183,8 @@
         if (Persons.Eliminar(this.Persona))
         {
             this.Persona = new Persona();
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Registro actualizado", Detail = "Eliminado con Exito", Duration = 4000 });
+
         }
 
     }

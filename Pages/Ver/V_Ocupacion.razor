@@ -2,7 +2,7 @@
 @page "/Ocupacion/{OcupacionId:int}"
 
 @inject OcupacionesBLL Ocupations
-
+@inject NotificationService notificationService
 
 
 <head>
@@ -77,7 +77,10 @@
             this.Buscar();
         }
     }
-
+    void ShowNotification(NotificationMessage message)
+    {
+        notificationService.Notify(message);
+    }
     public void Buscar()
     {
 
@@ -98,11 +101,17 @@
 
         if (Validar())
         {
-            return;
+            
+            if (Ocupations.Guardar(ocupacion))
+            {
+                Nuevo();
+            }
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Registro Actualizado", Detail = "Modificado con Exito", Duration = 4000 });
         }
-        if (Ocupations.Guardar(ocupacion))
+        else
         {
-            Nuevo();
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error de registro", Detail = "Campos Invalidos", Duration = 4000 });
+            
         }
     }
     public void Eliminar()
@@ -110,6 +119,7 @@
             if(Ocupations.Eliminar(this.ocupacion))
             {
                 this.ocupacion= new Ocupaciones();
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Registro actualizado", Detail = "Eliminado con Exito", Duration = 4000 });
             }
             
         }

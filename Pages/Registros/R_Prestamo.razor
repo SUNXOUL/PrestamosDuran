@@ -2,6 +2,7 @@
 
 @inject PrestamosBLL loans
 @inject PersonasBLL Persona
+@inject NotificationService notificationService
 
 
 <head>
@@ -109,7 +110,10 @@
             this.Buscar();
         }
     }
-
+    void ShowNotification(NotificationMessage message)
+    {
+        notificationService.Notify(message);
+    }
     public void Buscar()
     {
 
@@ -145,6 +149,11 @@
             {
                 Nuevo();
             }
+             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Registro Actualizado", Detail = "Guardado con Exito", Duration = 4000 });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error de registro", Detail = "Campos invalidos", Duration = 4000 });
         }
 
     }

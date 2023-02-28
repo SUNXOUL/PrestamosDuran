@@ -4,6 +4,7 @@
 @inject PagosDetallesBLL PaysDetails
 @inject PersonasBLL Persons
 @inject PrestamosBLL Loans
+@inject NotificationService notificationService
 
 <head>
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
@@ -129,6 +130,11 @@
         }
     }
 
+    void ShowNotification(NotificationMessage message)
+    {
+        notificationService.Notify(message);
+    }
+
     public void Buscar()
     {
 
@@ -179,7 +185,12 @@
                 {
                     Nuevo();
                 }
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Registro Actualizado", Detail = "Guardado con Exito", Duration = 4000 });
             }
+            
+        }
+        else{
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error de registro", Detail = "Campos invalidos", Duration = 4000 });
         }
 
 

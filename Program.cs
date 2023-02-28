@@ -4,18 +4,21 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using GestionPrestamosPersonales2023;
+using Radzen;
+using Radzen.Blazor;
 
 //Inyeccion de Context
 
 var builder = WebApplication.CreateBuilder(args);
 var ConStr = builder.Configuration.GetConnectionString("ConStr");
 builder.Services.AddDbContext<Contexto>(Options =>Options.UseSqlite(ConStr));
- 
+
 builder.Services.AddScoped<OcupacionesBLL>();
 builder.Services.AddScoped<PersonasBLL>();
 builder.Services.AddScoped<PrestamosBLL>();
 builder.Services.AddScoped<PagosBLL>();
 builder.Services.AddScoped<PagosDetallesBLL>();
+builder.Services.AddScoped<NotificationService>();
 
 
 // Add services to the container.

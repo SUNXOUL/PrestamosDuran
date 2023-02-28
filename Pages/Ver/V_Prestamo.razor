@@ -4,6 +4,7 @@
 
 @inject PrestamosBLL loans
 @inject PersonasBLL Persona
+@inject NotificationService notificationService
 
 <head>
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
@@ -102,6 +103,10 @@
             this.Buscar();
         }
     }
+    void ShowNotification(NotificationMessage message)
+    {
+        notificationService.Notify(message);
+    }
 
     public void Buscar()
     {
@@ -127,6 +132,13 @@
             {
                 Nuevo();
             }
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Registro Actualizado", Detail = "Modificado con Exito", Duration = 4000 });
+
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error de registro", Detail = "Campos Invalidos", Duration = 4000 });
+            
         }
 
     }
@@ -152,10 +164,11 @@
     }
     public void Eliminar()
     {
-        if (loans
-        .Eliminar(this.Prestamo))
+        if (loans.Eliminar(this.Prestamo))
         {
             this.Prestamo = new Prestamo();
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Registro actualizado", Detail = "Eliminado con Exito", Duration = 4000 });
+
         }
 
     }
