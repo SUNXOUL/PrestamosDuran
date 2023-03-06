@@ -9,8 +9,7 @@ namespace GestionPrestamosPersonales2023
         public String? Nombre { get; set; }
         public String? Telefono { get; set; }
         public String? Celular { get; set; }
-        public int? Balance { get; set; }
-        public int? L_Balance{get;set;}
+        public double Balance { get; set; }
         public String? Email { get; set; }
         public String? Direccion { get; set; }
 

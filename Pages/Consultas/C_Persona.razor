@@ -4,7 +4,6 @@
 @inject PrestamosBLL loans
 @inject OcupacionesBLL ocupations
 @inject PagosBLL Pays
-@inject PagosDetallesBLL PaysDetails
 
 <head>
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
@@ -51,42 +50,28 @@
     <a type="button" href="Persona/@PersonaId" class="btn btn-primary"><i class="fi fi-br-search"></i> </a>
 </div>
 <br>
-<table class="table table-bordered table-striped" style="border-color: #edecec;">
-    <thead style="background-color: #0096c7">
-        <tr>
-            <th>#ID</th>
-            <th>Nombre</th>
-            <th>Telefono</th>
-            <th>Celular</th>
-            <th>Balance</th>
-            <th>Dirección</th>
-            <th>Fecha de Nacimiento</th>
-            <th>Ocupacion</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Persons.GetList())
-        {
-            <tr>
-                <td>@item.PersonaId</td>
-                <td>@item.Nombre</td>
-                <td>@item.Telefono</td>
-                <td>@item.Celular</td>
-                <td>@item.Balance</td>
-                <td>@item.Direccion</td>
-                <td>@item.F_Nacimiento</td>
-                @foreach (var ocupaciones in ocupations.GetList())
-                {
-                    <td>@ocupaciones.Descripcion</td>
-                }
-                
-                <td><a class="Editar" href="Persona/@item.PersonaId">Editar</a></td>
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false"
+        FilterMode="FilterMode.Advanced" AllowGrouping="true" AllowSorting="true" AllowPaging="true"
+        PagerHorizontalAlign="HorizontalAlign.Left" Data="Persons.GetList()" TItem="Persona" ColumnWidth="200px"
+        LogicalFilterOperator="LogicalFilterOperator.Or" ShowPagingSummary="true">
+        <Columns>
+            <RadzenDataGridColumn  TItem="Persona" Filterable="false" Sortable="false"  Frozen="true" Title="Acciones">
+                <Template Context="Item">
+                    <RadzenLink Path=@($"Persona/{Item.PersonaId}") Text="Ver" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Persona"  Filterable="true" Sortable="true"  Property="Nombre" Title="Nombre"/>
+            <RadzenDataGridColumn TItem="Persona"  Filterable="true" Sortable="true"  Property="Telefono" Title="Telefono"/>
+            <RadzenDataGridColumn TItem="Persona"  Filterable="true" Sortable="true"  Property="Celular" Title="Celular"/>
+            <RadzenDataGridColumn TItem="Persona"  Filterable="true" Sortable="true"  Property="Balance" Title="Balance"/>
+            <RadzenDataGridColumn TItem="Persona"  Filterable="true" Sortable="true"  Property="Email" Title="Email"/>
+            <RadzenDataGridColumn TItem="Persona"  Filterable="true" Sortable="true"  Property="Direccion" Title="Direccion"/>
+            <RadzenDataGridColumn TItem="Persona"  Filterable="true" Sortable="true"  Property="F_Nacimiento" Title="Fecha de Nacimiento"/>
+            <RadzenDataGridColumn TItem="Persona"  Filterable="true" Sortable="true"  Property="Ocupacion" Title="Ocupacion"/>
+            
+            </Columns>
+    </RadzenDataGrid>
 
-            </tr>
-        }
-    </tbody>
-</table>
 
 
 @code {
@@ -104,40 +89,6 @@
             this.Persona.PersonaId = PersonaId;
             this.Buscar();
         }
-        foreach (var Persona in Persons.GetList())
-        {
-            Persona.Balance = 0;
-
-            foreach (var Prestamo in loans.GetList())
-            {
-                if (Prestamo.PersonaId == Persona.PersonaId)
-                {
-                    Persona.Balance += Prestamo.Monto;
-                    
-                    foreach(var PagoDetallado in PaysDetails.GetList())
-                    {
-                        if(Prestamo.PrestamoId == PagoDetallado.PrestamoId)
-                        {
-                            foreach(var Pago in Pays.GetList() )
-                            {
-                                if(Pago.PersonaId == PagoDetallado.PrestamoId)
-                                {
-                                    Persona.Balance-=Pago.Monto;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (Persona.Balance != Persona.L_Balance)
-            {
-                Persons.Modificar(Persona);
-                
-            }
-            
-        }
-
     }
 
     public void Buscar()

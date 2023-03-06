@@ -2,7 +2,6 @@
 @page "/Pago/{PagoId:int}"
 
 @inject PagosBLL Pays
-@inject PagosDetallesBLL PaysDetails
 @inject PersonasBLL Persons
 @inject PrestamosBLL Loans
 @inject NotificationService notificationService
@@ -44,57 +43,96 @@
 </head>
 
 
+
 <div class="Carta" style="display: block;">
 
     <div class="card-Header">
-        <h3>Editar Pago</h3>
+        <h3>Nuevo Pago</h3>
     </div>
     <div class="Entrada">
         <label for="PagoID">PagoID:</label>
-        <input class="form-control" @bind="@Pago.PagoId" aria-label="Recipient's username" aria-describedby="basic-addon2" id="PagoID" name="PagoID">
+        <input class="form-control" @bind="@Pago.PagoId" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="PagoID" name="PagoID">
     </div>
     <div class="Entrada">
         <label for="F_Pago">Fecha Pago:</label>
-        <input type="date" @bind="Pago.Fecha" class="form-control" aria-label="Recipient's username" aria-describedby="basic-addon2" id="F_Inicio" name="F_Pago">
+        <input type="date" @bind="Pago.Fecha" class="form-control" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="F_Inicio" name="F_Pago">
     </div>
-    <div class="Entrada">
+            <div class="Entrada">
+        <label for="Concepto">Concepto:</label>
+        <input class="form-control" @bind="@Pago.Concepto" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="Concepto" name="Concepto">
+    </div>
+    
+        <div class="Entrada">
         <label for="Persona">Persona:</label>
         <select id="Persona" name="Persona" @bind="Pago.PersonaId">
-            @foreach (var item in Persons.GetList())
+            @foreach(var item in Persons.GetList())
             {
+
                 <option value="@item.PersonaId"> @item.PersonaId | @item.Nombre</option>
             }
-
+            
         </select>
+        </div>
+
+
+
+    <div> 
     </div>
-    <div class="Entrada">
+            <div class="Entrada">
         <label for="Prestamo">Prestamo:</label>
         <select id="Prestamo" name="Prestamo" @bind="PagoDetalles.PrestamoId">
-            @foreach (var item in Loans.GetList())
+            <option></option>
+            @foreach(var item in Loans.GetList())
             {
-                if (item.PersonaId == Pago.PersonaId)
-                {
-                    <option value="@item.PrestamoId"> @item.PrestamoId | @item.Concepto</option>
-                }
-
+                    if(item.PersonaId == @Pago.PersonaId)
+                    {
+                        
+                        <option value="@item.PrestamoId"> @item.PrestamoId | @item.Concepto</option>
+                    }
+                
             }
-
+            
         </select>
     </div>
-    <div class="Entrada">
-        <label for="Concepto">Concepto:</label>
-        <input class="form-control" @bind="@Pago.Concepto" aria-label="Recipient's username"aria-describedby="basic-addon2" id="Concepto" name="Concepto">
+            <div class="Entrada">
+        <label for="Concepto">Monto:</label>
+        <input class="form-control" @bind="@PagoDetalles.ValorPagado" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="Concepto" name="Concepto">
     </div>
-    <div class="Entrada">
-        <label for="Monto">Monto:</label>
-        <input class="form-control" @bind="@Pago.Monto" aria-label="Recipient's username" aria-describedby="basic-addon2" id="Monto" name="Monto">
-    </div>
-    <br>
+
+    <button @onclick="Agregar">Agregar</button>
+    </div>   
+    
+<div >      
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Prestamo</th>
+        <th>Monto</th>
+      </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in @Pago.Detalles)
+        {
+            <tr>
+            <td>[@item.PrestamoId]  @(Loans.Buscar(item.PrestamoId).Concepto) </td>
+            <td><input @bind-value=@item.ValorPagado/></td>
+            </tr>
+        }
+
+    </tbody>
+  </table>
+</div>
+
+
     <div class="card-Footer">
         <button class="btn btn-primary" @onclick="Guardar"><i class="fi fi-ss-disk"></i> Guardar</button>
         <a href="/Pago" ><button class="btn btn-danger" @onclick="Eliminar"><i class="fi fi-ss-disk"></i> Eliminar</button></a>
     </div>
-</div>
+
 
 
 
@@ -136,27 +174,15 @@
             this.Pago = PagoEncontrada;
         }
 
-
-
-        foreach (var DetallesId in PaysDetails.GetList())
-        {
-            if (Pago.PagoId == DetallesId.PagoId)
-            {
-                Detalles = DetallesId.Id;
-            }
-        }
-        Console.WriteLine("///////////////////////////////////////////////////////////////////////////");
-        Console.WriteLine(Detalles);
-        Console.WriteLine("///////////////////////////////////////////////////////////////////////////");
-
-        var PagoDetallesEncontrado = PaysDetails.Buscar(Detalles);
-        if (PagoEncontrada != null)
-        {
-            this.PagoDetalles = PagoDetallesEncontrado;
-        }
-
     }
-
+        public void Agregar()
+    {
+        this.Buscar();
+        this.Pago.Detalles.Add(PagoDetalles);
+        this.Pago.Monto+=PagoDetalles.ValorPagado;
+        this.PagoDetalles=new PagoDetalles();
+        
+    }
     public void Nuevo()
     {
         this.Pago = new Pago();
@@ -169,12 +195,7 @@
         {
             if (Pays.Guardar(Pago))
             {
-                PagoDetalles.PagoId = Pago.PagoId;
-                PagoDetalles.ValorPagado = Pago.Monto;
-                if (PaysDetails.Guardar(PagoDetalles))
-                {
                     Nuevo();
-                }
             }
             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Registro Actualizado", Detail = "Modificado con Exito", Duration = 4000 });
         }
@@ -216,14 +237,7 @@
                     ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Registro actualizado", Detail = "Eliminado con Exito", Duration = 4000 });
                 }
 
-                if (!PaysDetails.Existe(this.PagoDetalles.Id))
-                {
-                    if (PaysDetails.Eliminar(this.PagoDetalles))
-                    {
 
-                        this.PagoDetalles = new PagoDetalles();
-                    }
-                }
 
             }
     }

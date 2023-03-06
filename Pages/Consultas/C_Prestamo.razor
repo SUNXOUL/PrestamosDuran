@@ -2,7 +2,7 @@
 
 
 @inject PrestamosBLL loans
-@inject PersonasBLL Persons
+@inject PersonasBLL Personas
 <head>
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
@@ -43,43 +43,30 @@
 <a type="button" href="Prestamo/@PrestamoId" class="btn btn-primary"><i class="fi fi-br-search"></i> </a>
 </div>
 <br>
-<table class="table table-bordered table-striped" style="border-color: #edecec;">
-    <thead style="background-color: #0096c7">
-        <tr>
-            <th>#ID</th>
-            <th>Fecha Inicio</th>
-            <th>Fecha vencimiento</th>
-            <th>Persona ID#</th>
-            <th>Persona</th>
-            <th>Concepto</th>
-            <th>Monto</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in loans.GetList())
-        {
-            <tr>
-                <td>@item.PrestamoId</td>
-                <td>@item.F_Inicio</td>
-                <td>@item.F_Vencimiento</td>
-                <td>@item.PersonaId</td>
-                <td>
-                    @foreach (var Persona in Persons.GetList())
-                    {
-                        if(@item.PersonaId==Persona.PersonaId)
-                        {
-                            @Persona.Nombre
-                        }
-                    }
-                </td>
-                <td>@item.Concepto</td>
-                <td>@item.Monto</td>
-                <td><a class="Editar" href="Prestamo/@item.PrestamoId">Editar</a></td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false"
+        FilterMode="FilterMode.Advanced" AllowGrouping="true" AllowSorting="true" AllowPaging="true"
+        PagerHorizontalAlign="HorizontalAlign.Left" Data="loans.GetList()" TItem="Prestamo" ColumnWidth="200px"
+        LogicalFilterOperator="LogicalFilterOperator.Or" ShowPagingSummary="true">
+        <Columns>
+            <RadzenDataGridColumn  TItem="Prestamo" Filterable="false" Sortable="false"  Frozen="true" Title="Acciones">
+                <Template Context="Item">
+                    <RadzenLink Path=@($"Prestamo/{Item.PrestamoId}") Text="Ver" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Prestamo"  Filterable="true" Sortable="true"  Property="PrestamoId" Title="ID"/>
+            <RadzenDataGridColumn TItem="Prestamo"  Filterable="true" Sortable="true"  Property="F_Inicio" Title="Fecha Inicio"/>
+            <RadzenDataGridColumn TItem="Prestamo"  Filterable="true" Sortable="true"  Property="F_Vencimiento" Title="Fecha Vencimiento"/>
+            <RadzenDataGridColumn  TItem="Prestamo" Filterable="true" Sortable="true"  Frozen="true" Title="Persona">
+                <Template Context="Item">
+                @(Personas.Buscar(Item.PersonaId).Nombre)
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Prestamo"  Filterable="true" Sortable="true"  Property="Concepto" Title="Concepto"/>
+            <RadzenDataGridColumn TItem="Prestamo"  Filterable="true" Sortable="true"  Property="Monto" Title="Monto"/>
+            </Columns>
+    </RadzenDataGrid>
 
 @code {
         [Parameter]

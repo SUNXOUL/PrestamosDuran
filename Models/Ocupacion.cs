@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GestionPrestamosPersonales2023
 {
-    public class Ocupaciones
+    public class Ocupacion
     {
         [Key]
         public  int OcupacionId{get;set;}

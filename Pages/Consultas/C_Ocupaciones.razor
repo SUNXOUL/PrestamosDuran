@@ -33,43 +33,38 @@
 
 <div style="display:flex; justify-content: space-between;">
 <h3>Listado de  Ocupaciones</h3>
-<a class="Agregar" href="R_Ocupacion" style="border: 0px; "><i class="fi fi-sr-add"> Agregar</i> </a>
+<RadzenLink class="Agregar" href="R_Ocupacion" style="border: 0px; "><i class="fi fi-sr-add"> Agregar</i> </RadzenLink>
 </div>
-<br>
-<h6>Buscar</h6>
-<div style="display:flex;">
- <input type="OcupacionID" id="_OcupacionID" class="form-control" @bind="OcupacionId" placeholder="Ingrese ID">
-<a type="button" href="Ocupacion/@OcupacionId" class="btn btn-primary"><i class="fi fi-br-search"></i> </a>
-</div>
-<br>
-<table class="table table-bordered table-striped" style="border-color: #edecec;">
-    <thead style="background-color:  #0096c7;">
-        <tr>
-            <th>#ID</th>
-            <th>Descripcion</th>
-            <th>Sueldo</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Ocupations.GetList())
-        {
-            <tr>
-                <td>@item.OcupacionId</td>
-                <td>@item.Descripcion</td>
-                <td>@item.Salario</td>
-                <td><a class="Editar" href="Ocupacion/@item.OcupacionId">Editar</a></td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false"
+        FilterMode="FilterMode.Advanced" AllowGrouping="true" AllowSorting="true" AllowPaging="true"
+        PagerHorizontalAlign="HorizontalAlign.Left" Data="Ocupations.GetList()" TItem="Ocupacion" ColumnWidth="200px"
+        LogicalFilterOperator="LogicalFilterOperator.Or" ShowPagingSummary="true">
+        <Columns>
+            <RadzenDataGridColumn Width="50px" TItem="Ocupacion" Filterable="false" Sortable="false"  Frozen="true" Title="Acciones">
+                <Template Context="Item">
+                    <RadzenLink Path=@($"Ocupacion/{Item.OcupacionId}") Text="Ver" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Ocupacion" Filterable="true" Sortable="true"  Frozen="false" Title="Descripcion">
+                <Template Context="Item">
+                    <RadzenText>@Item.Descripcion</RadzenText>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Ocupacion" Filterable="true" Sortable="true"  Frozen="false" Title="Salario">
+                <Template Context="Item">
+                    <RadzenText>@Item.Salario</RadzenText>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
 
 @code {
         [Parameter]
     public int OcupacionId { get; set; }
 
-    public Ocupaciones? ocupacion { get; set; } = new Ocupaciones();
-    public Ocupaciones? ocupacionEncontrada { get; set; }
+    public Ocupacion? ocupacion { get; set; } = new Ocupacion();
+    public Ocupacion? ocupacionEncontrada { get; set; }
 
 
     protected override void OnInitialized()
@@ -97,7 +92,7 @@
         {
             if(Ocupations.Eliminar(this.ocupacion))
             {
-                this.ocupacion= new Ocupaciones();
+                this.ocupacion= new Ocupacion();
             }
             
         }

@@ -15,7 +15,7 @@ namespace GestionPrestamosPersonales2023
 
         public String? Concepto { get; set; }
 
-        public int Monto { get; set; }
+        public double Monto { get; set; }
 
     }
 }

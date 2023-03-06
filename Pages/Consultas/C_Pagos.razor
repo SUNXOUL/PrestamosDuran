@@ -2,7 +2,6 @@
 
 
 @inject PagosBLL Pays
-@inject PagosDetallesBLL PaysDetails
 @inject PersonasBLL Persons
 
 <head>
@@ -45,53 +44,31 @@
 <a type="button" href="Pago/@PagoId" class="btn btn-primary"><i class="fi fi-br-search"></i> </a>
 </div>
 <br>
-<table class="table table-bordered table-striped" style="border-color: #edecec;">
-    <thead style="background-color: #0096c7">
-        <tr>
-            <th>#ID</th>
-            <th>Persona ID</th>
-            <th>Persona</th>
-            <th>Prestamo ID</th>
-            <th>Monto</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Pays.GetList())
-        {
-            <tr>
-                <td>@item.PagoId</td>
-                <td>@item.PersonaId</td>
-                @foreach (var persona in Persons.GetList())
-                {
-                    if(persona.PersonaId == item.PersonaId)
-                    {
-                        <td>@persona.Nombre</td>
-                    }
-                }
-                @foreach (var prestamo in PaysDetails.GetList())
-                {
-                    if(prestamo.PagoId == item.PagoId)
-                    {
-                        <td>@prestamo.PrestamoId</td>
-                    }
-                }
-                @foreach (var prestamo in PaysDetails.GetList())
-                {
-                    if(prestamo.PagoId == item.PagoId)
-                    {
-                        <td>@prestamo.ValorPagado</td>
-                    }
-                }
-                <td><a class="Editar" href="Pago/@item.PagoId">Editar</a></td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false"
+        FilterMode="FilterMode.Advanced" AllowGrouping="true" AllowSorting="true" AllowPaging="true"
+        PagerHorizontalAlign="HorizontalAlign.Left" Data="Pays.GetList()" TItem="Pago" ColumnWidth="200px"
+        LogicalFilterOperator="LogicalFilterOperator.Or" ShowPagingSummary="true">
+        <Columns>
+            <RadzenDataGridColumn  TItem="Pago" Filterable="false" Sortable="false"  Frozen="true" Title="Acciones">
+                <Template Context="Item">
+                    <RadzenLink Path=@($"Pago/{Item.PagoId}") Text="Ver" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pago"  Filterable="true" Sortable="true"  Property="PagoId" Title="ID"/>
+            <RadzenDataGridColumn TItem="Pago"  Filterable="true" Sortable="true"  Property="Fecha" Title="Fecha"/>
+            <RadzenDataGridColumn  TItem="Pago" Filterable="true" Sortable="true"  Frozen="true" Title="Persona">
+                <Template Context="Item">
+                    @Item.PersonaId
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pago"  Filterable="true" Sortable="true"  Property="Concepto" Title="Concepto"/>
+            <RadzenDataGridColumn TItem="Pago"  Filterable="true" Sortable="true"  Property="Monto" Title="Monto"/>
+            </Columns>
+    </RadzenDataGrid>
 
 @code {
         [Parameter]
-    public int PagoId { get; set; }
+    public int PagoId { get; set; } 
 
     public Pago? Pago { get; set; } = new Pago();
     public PagoDetalles PagoDetalles{get;set;}
@@ -119,19 +96,6 @@
 
         
 
-        foreach(var DetallesId in PaysDetails.GetList())
-        {
-            if(Pago.PagoId == DetallesId.PagoId)
-            {
-                Detalles = DetallesId.Id;
-            }
-        }
-
-        var PagoDetallesEncontrado = PaysDetails.Buscar(Detalles);
-        if (PagoEncontrada != null)
-        {
-            this.Pago = PagoEncontrada;
-        }
     }
         public void Nuevo()
     {

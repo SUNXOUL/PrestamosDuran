@@ -1,4 +1,4 @@
 /bin/
 /obj/
 /Migrations/
-Data\Prestamos.Db
+DataBase/Prestamos.Db

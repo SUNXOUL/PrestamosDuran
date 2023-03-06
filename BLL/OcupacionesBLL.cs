@@ -10,7 +10,7 @@ namespace GestionPrestamosPersonales2023
         _contexto = contexto;
     }
 
-    public bool Guardar(Ocupaciones ocupacion)
+    public bool Guardar(Ocupacion ocupacion)
     {
         if (!Existe(ocupacion.OcupacionId))
             return Insertar(ocupacion);
@@ -23,14 +23,14 @@ namespace GestionPrestamosPersonales2023
         return _contexto.Ocupaciones.Any(o => o.OcupacionId == ocupacionId);
     }
 
-    private bool Insertar(Ocupaciones ocupacion)
+    private bool Insertar(Ocupacion ocupacion)
     {
         _contexto.Ocupaciones.Add(ocupacion);
         int cantidad = _contexto.SaveChanges();
         return cantidad > 0;
     }
 
-    private bool Modificar(Ocupaciones ocupacion)
+    private bool Modificar(Ocupacion ocupacion)
     {
         _contexto.Entry(ocupacion).State = EntityState.Modified;
         int cantidad = _contexto.SaveChanges();
@@ -38,12 +38,12 @@ namespace GestionPrestamosPersonales2023
         return cantidad > 0;
     }
     
-    public List<Ocupaciones> GetOcupaciones()
+    public List<Ocupacion> GetOcupaciones()
     {
         return _contexto.Ocupaciones.ToList();
     }
 
-        public bool Eliminar(Ocupaciones ocupacion)
+        public bool Eliminar(Ocupacion ocupacion)
         {
             
             _contexto.Entry(ocupacion).State=EntityState.Deleted;
@@ -52,13 +52,13 @@ namespace GestionPrestamosPersonales2023
             return _contexto.SaveChanges()>0;
         }   
 
-        public Ocupaciones? Buscar(int ocupacionID)
+        public Ocupacion? Buscar(int ocupacionID)
         {
             return _contexto.Ocupaciones
                     .Where(o => o.OcupacionId==ocupacionID ).AsNoTracking().SingleOrDefault();
                     
         }
-        public List<Ocupaciones> GetList()
+        public List<Ocupacion> GetList()
         {
             return _contexto.Ocupaciones.AsNoTracking().ToList();
         }

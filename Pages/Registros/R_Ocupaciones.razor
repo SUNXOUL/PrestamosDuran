@@ -72,8 +72,8 @@
 @code {
     [Parameter]
     public int OcupacionId { get; set; }
-    public Ocupaciones? ocupacion { get; set; } = new Ocupaciones();
-    public Ocupaciones? ocupacionEncontrada { get; set; }
+    public Ocupacion? ocupacion { get; set; } = new Ocupacion();
+    public Ocupacion? ocupacionEncontrada { get; set; }
 
 
     protected override void OnInitialized()
@@ -101,7 +101,7 @@
 
     public void Nuevo()
     {
-        this.ocupacion = new Ocupaciones();
+        this.ocupacion = new Ocupacion();
     }
 
     public void Guardar()
@@ -144,7 +144,7 @@
         {
             if(Ocupations.Eliminar(this.ocupacion))
             {
-                this.ocupacion= new Ocupaciones();
+                this.ocupacion= new Ocupacion();
             }
             
         }

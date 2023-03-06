@@ -51,7 +51,7 @@
     <br>
     <div class="card-Footer">
         <button class="btn btn-primary" @onclick="Guardar"><i class="fi fi-ss-disk"></i> Guardar</button>
-        <a href="/Ocupaciones"><button class="btn btn-danger"  @onclick="Eliminar"><i class="fi fi-ss-disk"></i>Eliminar</button></a>
+        <a href="/Ocupacion"><button class="btn btn-danger"  @onclick="Eliminar"><i class="fi fi-ss-disk"></i>Eliminar</button></a>
     </div>
 </div>
 
@@ -65,8 +65,8 @@
 @code {
     [Parameter]
     public int OcupacionId { get; set; }
-    public Ocupaciones? ocupacion { get; set; } = new Ocupaciones();
-    public Ocupaciones? ocupacionEncontrada { get; set; }
+    public Ocupacion? ocupacion { get; set; } = new Ocupacion();
+    public Ocupacion? ocupacionEncontrada { get; set; }
 
 
     protected override void OnInitialized()
@@ -93,7 +93,7 @@
 
     public void Nuevo()
     {
-        this.ocupacion = new Ocupaciones();
+        this.ocupacion = new Ocupacion();
     }
 
     public void Guardar()
@@ -118,7 +118,7 @@
         {
             if(Ocupations.Eliminar(this.ocupacion))
             {
-                this.ocupacion= new Ocupaciones();
+                this.ocupacion= new Ocupacion();
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Registro actualizado", Detail = "Eliminado con Exito", Duration = 4000 });
             }
             

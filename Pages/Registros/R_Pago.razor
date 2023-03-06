@@ -1,7 +1,6 @@
 ﻿@page "/R_Pago"
 
 @inject PagosBLL Pays
-@inject PagosDetallesBLL PaysDetails
 @inject PersonasBLL Persons
 @inject PrestamosBLL Loans
 @inject NotificationService notificationService
@@ -56,6 +55,12 @@
         <input type="date" @bind="Pago.Fecha" class="form-control" aria-label="Recipient's username"
             aria-describedby="basic-addon2" id="F_Inicio" name="F_Pago">
     </div>
+            <div class="Entrada">
+        <label for="Concepto">Concepto:</label>
+        <input class="form-control" @bind="@Pago.Concepto" aria-label="Recipient's username"
+            aria-describedby="basic-addon2" id="Concepto" name="Concepto">
+    </div>
+    
         <div class="Entrada">
         <label for="Persona">Persona:</label>
         <select id="Persona" name="Persona" @bind="Pago.PersonaId">
@@ -67,6 +72,11 @@
             
         </select>
         </div>
+
+
+
+    <div> 
+    </div>
             <div class="Entrada">
         <label for="Prestamo">Prestamo:</label>
         <select id="Prestamo" name="Prestamo" @bind="PagoDetalles.PrestamoId">
@@ -82,25 +92,50 @@
             }
             
         </select>
-    
     </div>
-
-        <div class="Entrada">
-        <label for="Concepto">Concepto:</label>
-        <input class="form-control" @bind="@Pago.Concepto" aria-label="Recipient's username"
+            <div class="Entrada">
+        <label for="Concepto">Monto:</label>
+        <input class="form-control" @bind="@PagoDetalles.ValorPagado" aria-label="Recipient's username"
             aria-describedby="basic-addon2" id="Concepto" name="Concepto">
     </div>
-        <div class="Entrada">
-        <label for="Monto">Monto:</label>
-        <input class="form-control" @bind="@Pago.Monto" aria-label="Recipient's username"
+
+    <button @onclick="Agregar">Agregar</button>
+    </div>   
+    
+<div >      
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Prestamo</th>
+        <th>Monto</th>
+      </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in @Pago.Detalles)
+        {
+            <tr>
+            <td>[@item.PrestamoId]  @(Loans.Buscar(item.PrestamoId).Concepto) </td>
+            <td>@item.ValorPagado</td>
+            </tr>
+        }
+
+    </tbody>
+  </table>
+</div>
+
+
+    
+                <div class="Entrada">
+        <label for="Monto">Monto total:</label>
+        <input class="form-control" disabled="true" @bind="@Pago.Monto" aria-label="Recipient's username"
             aria-describedby="basic-addon2" id="Monto" name="Monto">
-    </div>
-    <br>
+            </div>
+
     <div class="card-Footer">
         <button class="btn btn-success" @onclick="Nuevo"><i class="fi fi-sr-add document"></i> Nuevo</button>
         <button class="btn btn-primary" @onclick="Guardar"><i class="fi fi-ss-disk"></i> Guardar</button>
     </div>
-</div>
+
 
 
 
@@ -114,12 +149,9 @@
     public int PagoId { get; set; }
     public Pago Pago { get; set; } = new Pago();
     public PagoDetalles PagoDetalles{get;set;} = new PagoDetalles();
-    public PagoDetalles PagoDetallesEncontrado{get;set;} = new PagoDetalles();
-    public int Detalles{get;set;}
+
 
     public int? PersonaId{set;get;}
-    public Pago? PagoEncontrado { get; set; }
-
 
     protected override void OnInitialized()
     {
@@ -146,20 +178,6 @@
 
         
 
-        foreach(var DetallesId in PaysDetails.GetList())
-        {
-            if(Pago.PagoId == DetallesId.PagoId)
-            {
-                Detalles = DetallesId.Id;
-            }
-        }
-
-        var PagoDetallesEncontrado = PaysDetails.Buscar(Detalles);
-        if (PagoEncontrada != null)
-        {
-            this.Pago = PagoEncontrada;
-        }
-
     }
 
     public void Nuevo()
@@ -178,13 +196,8 @@
         {
             if (Pays.Guardar(Pago))
             {
-                PagoDetalles.PagoId=Pago.PagoId;
-                PagoDetalles.ValorPagado=Pago.Monto;
-
-                if(PaysDetails.Guardar(PagoDetalles))
-                {
                     Nuevo();
-                }
+                
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Registro Actualizado", Detail = "Guardado con Exito", Duration = 4000 });
             }
             
@@ -192,9 +205,6 @@
         else{
             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error de registro", Detail = "Campos invalidos", Duration = 4000 });
         }
-
-
-
     }
 
     public bool Validar()
@@ -213,6 +223,14 @@
         }
 
         return valido;
+    }
+
+    public void Agregar()
+    {
+        this.Buscar();
+        this.Pago.Detalles.Add(PagoDetalles);
+        this.PagoDetalles=new PagoDetalles();
+        
     }
     public void Eliminar()
     {
