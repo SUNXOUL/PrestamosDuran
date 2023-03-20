@@ -12,7 +12,7 @@ namespace GestionPrestamosPersonales2023
         public DateOnly F_Vencimiento { get; set; }
 
         public int PersonaId { get; set; }
-
+        public double Balance { get; set; }
         public String? Concepto { get; set; }
 
         public double Monto { get; set; }

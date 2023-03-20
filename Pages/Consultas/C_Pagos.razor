@@ -1,26 +1,25 @@
 ﻿@page "/Pagos"
 
-
 @inject PagosBLL Pays
 @inject PersonasBLL Persons
 
 <head>
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css" />
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css" />
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css" />
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css" />
     <style>
-        .Agregar :hover{
-            color: #0077B6;
+        .Agregar :hover {
+            color: #0077b6;
         }
-        .Agregar{
+        .Agregar {
             text-decoration: none;
             color: black;
             padding: 5px;
             border: 5px;
-            border-color:  #0077B6;
+            border-color: #0077b6;
         }
-        .Editar{
+        .Editar {
             padding: 5px;
             background-color: #00b4d8;
             color: black;
@@ -29,52 +28,49 @@
             border-radius: 25px;
         }
     </style>
-    <style>
-    </style>
+    <style></style>
 </head>
 
-<div style="display:flex; justify-content: space-between;">
-<h3>Listado de Pagos</h3>
-<a class="Agregar" href="R_Pago" style="border: 0px; "><i class="fi fi-sr-add"> Agregar</i> </a>
+<div style="display: flex; justify-content: space-between;">
+    <h3>Listado de Pagos</h3>
+    <a class="Agregar" href="R_Pago" style="border: 0px;"><i class="fi fi-sr-add"> Agregar</i> </a>
 </div>
-<br>
+<br />
 <h6>Buscar</h6>
-<div style="display:flex;">
- <input type="PagoID" id="_PagoID" class="form-control" @bind="PagoId" placeholder="Ingrese ID">
-<a type="button" href="Pago/@PagoId" class="btn btn-primary"><i class="fi fi-br-search"></i> </a>
+<div style="display: flex;">
+    <input type="PagoID" id="_PagoID" class="form-control" @bind="PagoId" placeholder="Ingrese ID" />
+    <a type="button" href="Pago/@PagoId" class="btn btn-primary"><i class="fi fi-br-search"></i> </a>
 </div>
-<br>
-    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false"
-        FilterMode="FilterMode.Advanced" AllowGrouping="true" AllowSorting="true" AllowPaging="true"
-        PagerHorizontalAlign="HorizontalAlign.Left" Data="Pays.GetList()" TItem="Pago" ColumnWidth="200px"
-        LogicalFilterOperator="LogicalFilterOperator.Or" ShowPagingSummary="true">
-        <Columns>
-            <RadzenDataGridColumn  TItem="Pago" Filterable="false" Sortable="false"  Frozen="true" Title="Acciones">
-                <Template Context="Item">
-                    <RadzenLink Path=@($"Pago/{Item.PagoId}") Text="Ver" />
-                </Template>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="Pago"  Filterable="true" Sortable="true"  Property="PagoId" Title="ID"/>
-            <RadzenDataGridColumn TItem="Pago"  Filterable="true" Sortable="true"  Property="Fecha" Title="Fecha"/>
-            <RadzenDataGridColumn  TItem="Pago" Filterable="true" Sortable="true"  Frozen="true" Title="Persona">
-                <Template Context="Item">
-                    @Item.PersonaId
-                </Template>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="Pago"  Filterable="true" Sortable="true"  Property="Concepto" Title="Concepto"/>
-            <RadzenDataGridColumn TItem="Pago"  Filterable="true" Sortable="true"  Property="Monto" Title="Monto"/>
-            </Columns>
-    </RadzenDataGrid>
+<br />
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false"
+    FilterMode="FilterMode.Advanced" AllowGrouping="true" AllowSorting="true" AllowPaging="true"
+    PagerHorizontalAlign="HorizontalAlign.Left" Data="Pays.GetList()" TItem="Pago" ColumnWidth="200px" 
+    LogicalFilterOperator="LogicalFilterOperator.Or" ShowPagingSummary="true" >
+    <Columns>
+        <RadzenDataGridColumn TItem="Pago" Filterable="false" Sortable="false" Frozen="true" Title="Acciones">
+            <Template Context="Item">
+                <RadzenLink Path=@($"Pago/{@Item.PagoId}") Text="Ver" />
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Pago" Filterable="true" Sortable="true" Property="PagoId" Title="ID" />
+        <RadzenDataGridColumn TItem="Pago" Filterable="true" Sortable="true" Property="Fecha" Title="Fecha" />
+        <RadzenDataGridColumn TItem="Pago" Filterable="true" Sortable="true" Frozen="true" Title="Persona">
+            <Template Context="Item">
+                @Item.PersonaId
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Pago" Filterable="true" Sortable="true" Property="Concepto" Title="Concepto" />
+        <RadzenDataGridColumn TItem="Pago" Filterable="true" Sortable="true" Property="Monto" Title="Monto" />
+    </Columns>
+</RadzenDataGrid>
+
 
 @code {
         [Parameter]
     public int PagoId { get; set; } 
-
     public Pago? Pago { get; set; } = new Pago();
     public PagoDetalles PagoDetalles{get;set;}
     public int Detalles {get;set;}
-    
-
 
     protected override void OnInitialized()
     {
@@ -87,23 +83,20 @@
 
     public void Buscar()
     {
-
         var PagoEncontrada = Pays.Buscar(Pago.PagoId);
         if (PagoEncontrada != null)
         {
             this.Pago = PagoEncontrada;
         }
-
-        
-
     }
-        public void Nuevo()
+
+    public void Nuevo()
     {
         this.Pago = new Pago();
         this.PagoDetalles = new PagoDetalles();
     }
 
-        public void Eliminar()
+    public void Eliminar()
     {
         if(!Pays.Existe(this.PagoId))
         {
@@ -111,8 +104,6 @@
             {
                 Nuevo();
             }
-            
         }
-
     }
 }

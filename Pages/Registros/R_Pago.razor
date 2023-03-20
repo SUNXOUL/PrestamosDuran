@@ -127,7 +127,7 @@
     
                 <div class="Entrada">
         <label for="Monto">Monto total:</label>
-        <input class="form-control" disabled="true" @bind="@Pago.Monto" aria-label="Recipient's username"
+        <input class="form-control" disabled="true" @bind="total" aria-label="Recipient's username"
             aria-describedby="basic-addon2" id="Monto" name="Monto">
             </div>
 
@@ -150,6 +150,7 @@
     public Pago Pago { get; set; } = new Pago();
     public PagoDetalles PagoDetalles{get;set;} = new PagoDetalles();
 
+    public double total { get; set; }
 
     public int? PersonaId{set;get;}
 
@@ -194,6 +195,7 @@
     {
         if (Validar())
         {
+            this.Pago.Monto=total;
             if (Pays.Guardar(Pago))
             {
                     Nuevo();
@@ -230,7 +232,8 @@
         this.Buscar();
         this.Pago.Detalles.Add(PagoDetalles);
         this.PagoDetalles=new PagoDetalles();
-        
+        IEnumerable<double> montos = from monto in Pago.Detalles select monto.ValorPagado;
+        total = montos.Sum();
     }
     public void Eliminar()
     {
